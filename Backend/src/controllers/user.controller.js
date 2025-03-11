@@ -772,6 +772,73 @@ const getProductsDetails = asyncHandler(async (req,res)=>{
     )
 })
 
+const getProductsDetails1 = asyncHandler(async (req,res)=>{
+    const {productId} = req.params
+
+    const productDetails = await Product.aggregate([
+        {
+            $match:{
+                _id: new mongoose.Types.ObjectId(productId) 
+            }
+        },
+        {
+            $lookup:{
+                from:"categories",
+                localField:"category",
+                foreignField:"_id",
+                as:"ProductsCategory",
+                pipeline:[
+                    {
+                    $project:{
+                        name:1
+                    }
+                }
+                ]
+            }
+        },
+        {
+            $lookup:{
+                from:"users",
+                localField:"owner",
+                foreignField:"_id",
+                as:"ProductsOwner"
+            }
+        },
+        {
+            $addFields:{
+                ProductsCategory:{
+                    $first:"$ProductsCategory"
+                },
+                ProductsOwner:{
+                    $first:"$ProductsOwner"
+                }
+            }
+        },
+        {
+            $project:{
+                name:1,
+                productId:1,
+                price:1,
+                photos:1,
+                description:1,
+                stock:1,
+                ProductsCategory:1,
+                ProductsOwner:1
+            }
+        }
+    ])
+    
+    res
+    .status(200)
+    .json(
+        new ApiResponse(
+            201,
+            productDetails[0],
+            "Product Details"
+        )
+    )
+})
+
 export {
     registerUser,
     loginUser,
