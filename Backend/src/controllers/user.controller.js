@@ -772,7 +772,7 @@ const getProductsDetails = asyncHandler(async (req,res)=>{
     )
 })
 
-const getProductsDetails1 = asyncHandler(async (req,res)=>{
+const getProdctsDetails1 = asyncHandler(async (req,res)=>{
     const {productId} = req.params
 
     const productDetails = await Product.aggregate([
