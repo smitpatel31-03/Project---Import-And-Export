@@ -10,6 +10,9 @@ const curruntOrderSchema = new Schema(
             type: String,
             enum: ["PENDING", "PROCESSING", "SHIPPED", "IN TRANSIT", "CUSTOMS CLEARANCE", "DELIVERED", "CANCELLED", "FAILED"],
             default: "PENDING"
+        },
+        statusLocation : {
+            type: String
         }
     },
 )

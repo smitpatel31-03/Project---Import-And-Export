@@ -9,15 +9,17 @@ export const verifyJWTAdmin = asyncHandler(async(req,_,next)=>{
         //decode token
         //find admin
         //declared admin
+                       
+        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","")
         
-        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer","")
-    
+        
         if(!token){
             throw new ApiError(401,"Unauthorized Access")
         }
-    
+        
         //decode token
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_ADMIN)
+        
         
             //find admin
         const admin = await Admin.findById(decodedToken?._id).select("-password -refreshToken")
@@ -25,7 +27,7 @@ export const verifyJWTAdmin = asyncHandler(async(req,_,next)=>{
         if(!admin){
             throw new ApiError(401,"Invalid Token")
         }
-    
+        
         req.admin = admin
         next()
     

@@ -23,9 +23,6 @@ const adminSchema = new Schema(
         adminId: {
             type: Number
         },
-        key:{
-            type: String,
-        },
         role: {
             type: String,
             required: true,

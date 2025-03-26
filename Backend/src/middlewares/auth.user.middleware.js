@@ -31,7 +31,6 @@ export const verifyJWTUser = asyncHandler( async(req,_,next)=>{
             
         //declare user
         req.user = user
-        // console.log("req.user.schema: ",req.user.schema);
         
         next()
     } catch (error) {

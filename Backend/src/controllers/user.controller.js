@@ -115,18 +115,16 @@ const loginUser = asyncHandler(async (req, res) => {
     //response send cookie
 
     //get user details
-    const { email, password, phoneNumber } = req.body
+    const { email, password } = req.body
 
 
     //validate user details
-    if (!email && !phoneNumber) {
+    if (!email) {
         throw new ApiError(401, "Please Enter User Details")
     }
 
     //find user
-    const user = await User.findOne({
-        $or: [{ email }, { phoneNumber }]
-    })
+    const user = await User.findOne({ email })
 
     if (!user) {
         throw new ApiError(404, "User Not Found")
@@ -194,6 +192,18 @@ const logoutUser = asyncHandler(async (req, res) => {
         .cookie("accessToken", options)
         .cookie("refreshToken", options)
         .json(new ApiResponse(200, {}, "User Loogedout Successfully"))
+})
+
+const getCurruntUser = asyncHandler(async (req, res) => {
+    res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                req.user,
+                "Currunt User"
+            )
+        )
 })
 
 const UsersRefreshAccessToken = asyncHandler(async (req, res) => {
@@ -299,14 +309,14 @@ const addUserAddress = asyncHandler(async (req, res) => {
 })
 
 const updateUserAddress = asyncHandler(async (req, res) => {
-    const { userddressId } = req.params
+    const { useraddressId } = req.params
     const { name, addressLine1, addressLine2, city, postalCode, state, country, mobileNumber } = req.body
 
     if ([name, addressLine1, addressLine2, city, postalCode, state, country, mobileNumber].some((fild) => fild?.trim === "")) {
         throw new ApiError(400, "All Fields Are Compulsary Or Required")
     }
 
-    const updateAddress = await UserAddress.findByIdAndUpdate(userddressId, {
+    const updateAddress = await UserAddress.findByIdAndUpdate(useraddressId, {
         name,
         addressLine1,
         addressLine2,
@@ -346,7 +356,7 @@ const changeUsersCurruntPassword = asyncHandler(async (req, res) => {
     if (newPassword !== conformNewPassword) {
         throw new ApiError(401, "Conform Pawword Is Wrong")
     }
-
+    
     //find user
     const user = await User.findById(req.user?._id)
 
@@ -385,6 +395,8 @@ const changeUserDetails = asyncHandler(async (req, res) => {
 
     //get oldpassword and new password
     const { email, phoneNumber, fullName, country } = req.body
+
+    
 
     if ([email, phoneNumber, fullName, country].some((filed) => filed.trim() === "")) {
         throw new ApiError(401, "All Fields Are Compulsory Or Required")
@@ -484,13 +496,6 @@ const getUserDetails = asyncHandler(async (req, res) => {
             }
         },
         {
-            $addFields:{
-                userAddresses:{
-                    $first:"$userAddresses"
-                }
-            }
-        },
-        {
             $project: {
                 email: 1,
                 fullName: 1,
@@ -531,20 +536,20 @@ const getUserOrders = asyncHandler(async (req, res) => {
                 localField: "_id",
                 foreignField: "user",
                 as: "totalorders",
-                pipeline:[
+                pipeline: [
                     {
                         $lookup: {
                             from: "products",
                             localField: "product",
                             foreignField: "_id",
                             as: "product",
-                            pipeline:[
+                            pipeline: [
                                 {
-                                    $project:{
-                                        name:1,
-                                        productId:1,
-                                        price:1,
-                                        photos:1,
+                                    $project: {
+                                        name: 1,
+                                        productId: 1,
+                                        price: 1,
+                                        featuedImages: 1,
                                     }
                                 }
                             ]
@@ -556,46 +561,46 @@ const getUserOrders = asyncHandler(async (req, res) => {
                             localField: "userDeliveryAddress",
                             foreignField: "_id",
                             as: "userDeliveryAddress",
-                            pipeline:[
+                            pipeline: [
                                 {
-                                    $project:{
-                                        name:1,
-                                        addressLine1:1, 
-                                        addressLine2:1, 
-                                        city:1, 
-                                        postalCode:1, 
-                                        state:1, 
-                                        country:1, 
-                                        mobileNumber:1
+                                    $project: {
+                                        name: 1,
+                                        addressLine1: 1,
+                                        addressLine2: 1,
+                                        city: 1,
+                                        postalCode: 1,
+                                        state: 1,
+                                        country: 1,
+                                        mobileNumber: 1
                                     }
                                 }
                             ]
                         }
                     },
                     {
-                        $addFields:{
-                            product:{
-                                $first:"$product"
+                        $addFields: {
+                            product: {
+                                $first: "$product"
                             },
-                            userDeliveryAddress:{
-                                $first:"$userDeliveryAddress"
+                            userDeliveryAddress: {
+                                $first: "$userDeliveryAddress"
                             },
                         }
                     },
                     {
-                        $project:{
-                            product:1,
-                            quntity:1,
-                            userDeliveryAddress:1
+                        $project: {
+                            product: 1,
+                            quntity: 1,
+                            userDeliveryAddress: 1
                         }
                     }
                 ],
             }
         },
         {
-            $addFields:{
-                totalorders:{
-                    $first:"$totalorders"
+            $addFields: {
+                totalorders: {
+                    $first: "$totalorders"
                 }
             }
         },
@@ -611,7 +616,7 @@ const getUserOrders = asyncHandler(async (req, res) => {
     if (!userOrders?.length) {
         throw new ApiError(401, "Can't Find User Orders")
     }
-    
+
     res
         .status(200)
         .json(
@@ -623,226 +628,464 @@ const getUserOrders = asyncHandler(async (req, res) => {
         )
 })
 
-const catagoryDetailsOrListOfCatagorysProduct = asyncHandler(async (req,res)=>{
-    const {catagoryId} = req.params
+const getCurruntOrder = asyncHandler(async (req, res) => {
+    const { orderId } = req.params
 
-    const catagoryDetailsOrListOfCatagorysProduct = await Category.aggregate([
+    const userCurruntOrder = await CurruntOrder.aggregate([
         {
-            $match:{
-                _id:new mongoose.Types.ObjectId(catagoryId)
+            $match: {
+                _id: new mongoose.Types.ObjectId(orderId)
             }
         },
         {
-            $lookup:{
-                from:"products",
-                localField:"products",
-                foreignField:"_id",
-                as:"products",
-                pipeline:[
+            $lookup: {
+                from: "orders",
+                localField: "curruntOrder",
+                foreignField: "_id",
+                as: "curruntOrder",
+                pipeline: [
                     {
-                        $project:{
-                            name:1,
-                            productId:1,
-                            price:1,
-                            photos:1,
-                            description:1,
-                            stock:1
+                        $lookup: {
+                            from: "products",
+                            localField: "product",
+                            foreignField: "_id",
+                            as: "product",
+                            pipeline: [
+                                {
+                                    $lookup: {
+                                        from: "categories",
+                                        localField: "category",
+                                        foreignField: "_id",
+                                        as: "category",
+                                        pipeline: [
+                                            {
+                                                $project: {
+                                                    name: 1
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    $addFields: {
+                                        category: {
+                                            $first: "$category"
+                                        }
+                                    }
+                                },
+                                {
+                                    $project: {
+                                        name: 1,
+                                        productId: 1,
+                                        price: 1,
+                                        featuedImages: 1,
+                                        product: 1
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "useraddresses",
+                            localField: "userDeliveryAddress",
+                            foreignField: "_id",
+                            as: "deliveryAddress",
+                            pipeline: [
+                                {
+                                    $project: {
+                                        addressLine1: 1,
+                                        addressLine2: 1,
+                                        city: 1,
+                                        postalCode: 1,
+                                        state: 1,
+                                        country: 1,
+                                        mobileNumber: 1
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        $addFields: {
+                            product: {
+                                $first: "$product"
+                            },
+                            deliveryAddress: {
+                                $first: "$deliveryAddress"
+                            }
+                        }
+                    },
+                    {
+                        $project: {
+                            product: 1,
+                            deliveryAddress: 1
                         }
                     }
                 ]
             }
         },
         {
-            $addFields:{
-                products:{
-                    $first:"$products"
+            $addFields: {
+                CurruntOrder: {
+                    $first: "$curruntOrder"
                 }
             }
         },
         {
-            $project:{
-                products:1,
-                name:1,
-                description:1,
-                image:1
+            $project: {
+                CurruntOrder: 1,
+                status: 1,
+                statusLocation: 1
+            }
+        }
+    ])
+
+    // const curruntOrders = await CurruntOrder.aggregate([
+    //     {
+    //         $match: {
+    //             _id: new mongoose.Types.ObjectId(orderId)
+    //         }
+    //     },
+    //     {
+    //         $lookup: {
+    //             from: "orders",
+    //             localField: "curruntOrder",
+    //             foreignField: "_id",
+    //             as: "CurruntOrder",
+    //             pipeline: [
+    //                 {
+    //                     $lookup: {
+    //                         from: "products",
+    //                         localField: "product",
+    //                         foreignField: "_id",
+    //                         as: "curruntOrderProduct",
+    //                         pipeline: [
+    //                             {
+    //                                 $lookup: {
+    //                                     from: "categories",
+    //                                     localField: "category",
+    //                                     foreignField: "_id",
+    //                                     as: "curruntOrderProductcatagory",
+    //                                     pipeline: [
+    //                                         {
+    //                                             $project: {
+    //                                                 name: 1
+    //                                             }
+    //                                         }
+    //                                     ]
+    //                                 }
+    //                             },
+    //                             {
+    //                                 $addFields: {
+    //                                     curruntOrderProductcatagory: {
+    //                                         $first: "$curruntOrderProductcatagory"
+    //                                     }
+    //                                 }
+    //                             },
+    //                             {
+    //                                 $project: {
+    //                                     name: 1,
+    //                                     productId: 1,
+    //                                     price: 1,
+    //                                     featuedImages: 1,
+    //                                     curruntOrderProductcatagory: 1
+    //                                 }
+    //                             }
+    //                         ]
+    //                     },
+
+    //                 },
+    //                 {
+    //                     $lookup: {
+    //                         from: "useraddresses",
+    //                         localField: "userDeliveryAddress",
+    //                         foreignField: "_id",
+    //                         as: "curruntOrdersdelivryaddress",
+    //                         pipeline: [
+    //                             {
+    //                                 $project: {
+    //                                     addressLine1: 1,
+    //                                     addressLine2: 1,
+    //                                     city: 1,
+    //                                     postalCode: 1,
+    //                                     state: 1,
+    //                                     country: 1,
+    //                                     mobileNumber: 1
+    //                                 }
+    //                             }
+    //                         ]
+    //                     }
+    //                 },
+    //                 {
+    //                     $addFields: {
+    //                         curruntOrderProduct: {
+    //                             $first: "$curruntOrderProduct"
+    //                         },
+    //                         curruntOrdersdelivryaddress: {
+    //                             $first: "$curruntOrdersdelivryaddress"
+    //                         },
+
+    //                     }
+    //                 },
+    //                 {
+    //                     $project: {
+    //                         curruntOrderProduct: 1,
+    //                         curruntOrdersdelivryaddress: 1
+    //                     }
+    //                 }
+    //             ]
+    //         }
+    //     },
+    //     {
+    //         $addFields: {
+    //             CurruntOrder: {
+    //                 $first: "$CurruntOrder"
+    //             }
+    //         }
+    //     },
+    //     {
+    //         $project: {
+    //             CurruntOrder: 1,
+    //             status: 1,
+    //             statusLocation: 1
+    //         }
+    //     }
+    // ])
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                userCurruntOrder[0],
+                "Currunt Order"
+            )
+        )
+})
+
+const catagoryDetailsOrListOfCatagorysProduct = asyncHandler(async (req, res) => {
+    const { catagoryId } = req.params
+
+    const catagoryDetailsOrListOfCatagorysProduct = await Category.aggregate([
+        {
+            $match: {
+                _id: new mongoose.Types.ObjectId(catagoryId)
+            }
+        },
+        {
+            $lookup: {
+                from: "products",
+                localField: "products",
+                foreignField: "_id",
+                as: "products",
+                pipeline: [
+                    {
+                        $project: {
+                            name: 1,
+                            productId: 1,
+                            price: 1,
+                            featuedImages: 1,
+                            description: 1,
+                            stock: 1
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $addFields: {
+                products: {
+                    $first: "$products"
+                }
+            }
+        },
+        {
+            $project: {
+                products: 1,
+                name: 1,
+                description: 1,
+                image: 1
             }
         }
     ])
 
     res
-    .status(200)
-    .json(
-        new ApiResponse(
-            201,
-            catagoryDetailsOrListOfCatagorysProduct[0],
-            "Catagories Details"
+        .status(200)
+        .json(
+            new ApiResponse(
+                201,
+                catagoryDetailsOrListOfCatagorysProduct[0],
+                "Catagories Details"
+            )
         )
-    )
 })
 
-const getAllCatagories = asyncHandler(async (_,res)=>{
+const getAllCatagories = asyncHandler(async (_, res) => {
+
+
     const AllCatagories = await Category.aggregate([
         {
-        $project:{
-            name:1,
-            description:1,
-            image:1
+            $project: {
+                name: 1,
+                description: 1,
+                image: 1
+            }
         }
-    }
-])
+    ])
 
     console.log(getAllCatagories);
 
     res
-    .status(200)
-    .json(
-        new ApiResponse(
-            200,
-            AllCatagories,
-            "All Catagories"
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                AllCatagories,
+                "All Catagories"
+            )
         )
-    )
-    
+
 })
 
-const getProductsDetails = asyncHandler(async (req,res)=>{
-    const {productId} = req.params
+const getProductsDetails = asyncHandler(async (req, res) => {
+    const { productId } = req.params
 
     const productDetails = await Product.aggregate([
         {
-            $match:{
-                _id: new mongoose.Types.ObjectId(productId) 
+            $match: {
+                _id: new mongoose.Types.ObjectId(productId)
             }
         },
         {
-            $lookup:{
-                from:"categories",
-                localField:"category",
-                foreignField:"_id",
-                as:"ProductsCategory",
-                pipeline:[
+            $lookup: {
+                from: "categories",
+                localField: "category",
+                foreignField: "_id",
+                as: "ProductsCategory",
+                pipeline: [
                     {
-                    $project:{
-                        name:1
+                        $project: {
+                            name: 1
+                        }
                     }
-                }
                 ]
             }
         },
         {
-            $lookup:{
-                from:"users",
-                localField:"owner",
-                foreignField:"_id",
-                as:"ProductsOwner"
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "ProductsOwner"
             }
         },
         {
-            $addFields:{
-                ProductsCategory:{
-                    $first:"$ProductsCategory"
+            $addFields: {
+                ProductsCategory: {
+                    $first: "$ProductsCategory"
                 },
-                ProductsOwner:{
-                    $first:"$ProductsOwner"
+                ProductsOwner: {
+                    $first: "$ProductsOwner"
                 }
             }
         },
         {
-            $project:{
-                name:1,
-                productId:1,
-                price:1,
-                photos:1,
-                description:1,
-                stock:1,
-                ProductsCategory:1,
-                ProductsOwner:1
+            $project: {
+                name: 1,
+                productId: 1,
+                price: 1,
+                photos: 1,
+                featuedImages: 1,
+                description: 1,
+                stock: 1,
+                ProductsCategory: 1,
+                ProductsOwner: 1
             }
         }
     ])
-    
+
     res
-    .status(200)
-    .json(
-        new ApiResponse(
-            201,
-            productDetails[0],
-            "Product Details"
+        .status(200)
+        .json(
+            new ApiResponse(
+                201,
+                productDetails[0],
+                "Product Details"
+            )
         )
-    )
 })
 
-const getProdctsDetails1 = asyncHandler(async (req,res)=>{
-    const {productId} = req.params
+const getAllProducts = asyncHandler(async (_, res) => {
 
-    const productDetails = await Product.aggregate([
+    const AllProducts = await Product.aggregate([
         {
-            $match:{
-                _id: new mongoose.Types.ObjectId(productId) 
-            }
-        },
-        {
-            $lookup:{
-                from:"categories",
-                localField:"category",
-                foreignField:"_id",
-                as:"ProductsCategory",
-                pipeline:[
+            $lookup: {
+                from: "categories",
+                localField: "category",
+                foreignField: "_id",
+                as: "categories",
+                pipeline: [
                     {
-                    $project:{
-                        name:1
+                        $project: {
+                            name: 1
+                        }
                     }
-                }
                 ]
             }
         },
         {
-            $lookup:{
-                from:"users",
-                localField:"owner",
-                foreignField:"_id",
-                as:"ProductsOwner"
-            }
-        },
-        {
-            $addFields:{
-                ProductsCategory:{
-                    $first:"$ProductsCategory"
-                },
-                ProductsOwner:{
-                    $first:"$ProductsOwner"
+            $addFields: {
+                categories: {
+                    $first: "$categories"
                 }
             }
         },
         {
-            $project:{
-                name:1,
-                productId:1,
-                price:1,
-                photos:1,
-                description:1,
-                stock:1,
-                ProductsCategory:1,
-                ProductsOwner:1
+            $project: {
+                categories: 1,
+                name: 1,
+                description: 1,
+                featuedImages: 1,
+                photos: 1,
+                productId: 1,
+                price: 1
             }
         }
     ])
-    
+
     res
-    .status(200)
-    .json(
-        new ApiResponse(
-            201,
-            productDetails[0],
-            "Product Details"
+        .status(200)
+        .json(
+            new ApiResponse(
+                201,
+                AllProducts[0],
+                "Catagories Details"
+            )
         )
-    )
+})
+
+const findUserAddress = asyncHandler(async (req, res) => {
+    const { orderId } = req.params
+
+    const AddressDetails = await UserAddress.aggregate([
+        { $match: { _id: new mongoose.Types.ObjectId(orderId) } },
+        { $project: { addressLine1: 1, addressLine2: 1, city: 1, postalCode: 1, state: 1, country: 1, mobileNumber: 1 } }
+
+    ])
+
+    res.status(200).json(new ApiResponse(
+        201,
+        AddressDetails[0],
+        "Your Address Details"
+    ))
 })
 
 export {
     registerUser,
     loginUser,
     logoutUser,
+    getCurruntUser,
     UsersRefreshAccessToken,
     addUserAddress,
     changeUsersCurruntPassword,
@@ -856,5 +1099,8 @@ export {
     getUserOrders,
     catagoryDetailsOrListOfCatagorysProduct,
     getAllCatagories,
-    getProductsDetails
+    getProductsDetails,
+    getCurruntOrder,
+    getAllProducts,
+    findUserAddress
 }
