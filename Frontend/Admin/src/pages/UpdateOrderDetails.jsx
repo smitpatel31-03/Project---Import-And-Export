@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import service from '../services/config';
 import { Button,OrderForm } from '../components/index.js';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
-function OrderDetails() {
+function UpdateOrderDetails() {
     const { id } = useParams();
     const [order, setOrder] = useState(null);
-    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchOrderDetails = async () => {
@@ -22,7 +21,6 @@ function OrderDetails() {
     if (!order) {
         return <h1 className="text-center text-white mt-10">No Order Found</h1>;
     }
-
 
     return (
         <div className="w-full min-h-screen bg-gray-900 p-6">
@@ -43,13 +41,10 @@ function OrderDetails() {
 
             <div className="grid md:grid-cols-2 gap-6 mt-6 bg-gray-800 p-6 rounded-lg shadow-lg">
                 
-                 <div className="text-white">
-                 <h2 className="text-xl font-semibold">Order Details</h2>
-                 <p className="text-gray-400 mt-2">Status: {order.status}</p>
-                 <p className="text-gray-400">Location: {order.statusLocation}</p>
+                <div>
+                    <OrderForm Order={id}/>
+                </div>
                  
-             </div>
-               
                 <div>
                     
                     <div className="text-white">
@@ -69,12 +64,8 @@ function OrderDetails() {
                     </div>
                 </div>
             </div>
-
-            <div className="mt-6 flex justify-center gap-4">
-                <Button onClick={()=>navigate(`/UpdateOrderDetails/${id}`)} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg shadow-md transition">Update Order Details</Button>
-            </div>
         </div>
     );
 }
 
-export default OrderDetails;
+export default UpdateOrderDetails;

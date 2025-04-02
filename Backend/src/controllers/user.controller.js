@@ -276,9 +276,6 @@ const addUserAddress = asyncHandler(async (req, res) => {
         throw new ApiError(400, "All Fields Are Compulsary Or Required")
     }
 
-    // console.log(req.user);
-    // console.log(req.user.paths);
-
     //import users
     const user = await User.findById(req.user?._id)
 
@@ -432,7 +429,11 @@ const bookOrder = asyncHandler(async (req, res) => {
     const { quntity, userDeliveryAddress } = req.body
     const { productId } = req.params
 
-    const user = await User.findById(req.user?._id).select("-password -refreshToken")
+    console.log("userDeliveryAddress :",userDeliveryAddress);
+    
+    const user = await User.findById(req.user?._id)
+
+    
     const order = await Order.create({
         user,
         product: productId,
@@ -523,7 +524,7 @@ const getUserDetails = asyncHandler(async (req, res) => {
 })
 
 const getUserOrders = asyncHandler(async (req, res) => {
-
+    
     const userOrders = await User.aggregate([
         {
             $match: {
@@ -598,13 +599,6 @@ const getUserOrders = asyncHandler(async (req, res) => {
             }
         },
         {
-            $addFields: {
-                totalorders: {
-                    $first: "$totalorders"
-                }
-            }
-        },
-        {
             $project:
             {
                 quntity: 1,
@@ -622,16 +616,16 @@ const getUserOrders = asyncHandler(async (req, res) => {
         .json(
             new ApiResponse(
                 201,
-                userOrders[0],
-                "User Orders"
+                userOrders,
+                "User Order Details"
             )
         )
 })
 
-const getCurruntOrder = asyncHandler(async (req, res) => {
+const getUserOrderDetails = asyncHandler(async (req, res) => {
     const { orderId } = req.params
 
-    const userCurruntOrder = await CurruntOrder.aggregate([
+    const userOrderDetails = await Order.aggregate([
         {
             $match: {
                 _id: new mongoose.Types.ObjectId(orderId)
@@ -639,17 +633,90 @@ const getCurruntOrder = asyncHandler(async (req, res) => {
         },
         {
             $lookup: {
+                from: "products",
+                localField: "product",
+                foreignField: "_id",
+                as: "product",
+                pipeline: [
+                    {
+                        $project: {
+                            name: 1,
+                            productId: 1,
+                            price: 1,
+                            featuedImages: 1,
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $lookup: {
+                from: "useraddresses",
+                localField: "userDeliveryAddress",
+                foreignField: "_id",
+                as: "userDeliveryAddress",
+                pipeline: [
+                    {
+                        $project: {
+                            name: 1,
+                            addressLine1: 1,
+                            addressLine2: 1,
+                            city: 1,
+                            postalCode: 1,
+                            state: 1,
+                            country: 1,
+                            mobileNumber: 1
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $addFields: {
+                product: {
+                    $first: "$product"
+                },
+                userDeliveryAddress: {
+                    $first: "$userDeliveryAddress"
+                },
+            }
+        },
+        {
+            $project: {
+                product: 1,
+                quntity: 1,
+                userDeliveryAddress: 1
+            }
+        }
+    ])
+    
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(
+                201,
+                userOrderDetails,
+                "User Orders"
+            )
+        )
+})
+
+const getCurruntOrder = asyncHandler(async (req, res) => {
+    const userCurruntOrder = await CurruntOrder.aggregate([
+        {
+            $lookup: {
                 from: "orders",
                 localField: "curruntOrder",
                 foreignField: "_id",
-                as: "curruntOrder",
+                as: "orderDetails",
                 pipeline: [
                     {
                         $lookup: {
                             from: "products",
                             localField: "product",
                             foreignField: "_id",
-                            as: "product",
+                            as: "productDetails",
                             pipeline: [
                                 {
                                     $lookup: {
@@ -658,28 +725,18 @@ const getCurruntOrder = asyncHandler(async (req, res) => {
                                         foreignField: "_id",
                                         as: "category",
                                         pipeline: [
-                                            {
-                                                $project: {
-                                                    name: 1
-                                                }
-                                            }
+                                            { $project: { name: 1 } }
                                         ]
                                     }
                                 },
-                                {
-                                    $addFields: {
-                                        category: {
-                                            $first: "$category"
-                                        }
-                                    }
-                                },
+                                { $addFields: { category: { $first: "$category" } } },
                                 {
                                     $project: {
                                         name: 1,
                                         productId: 1,
                                         price: 1,
                                         featuedImages: 1,
-                                        product: 1
+                                        description:1
                                     }
                                 }
                             ]
@@ -707,161 +764,152 @@ const getCurruntOrder = asyncHandler(async (req, res) => {
                         }
                     },
                     {
+                        $lookup: {
+                            from: "users",
+                            localField: "user",
+                            foreignField: "_id",
+                            as: "user",
+                            pipeline: [
+                                {
+                                    $match: {
+                                        _id: new mongoose.Types.ObjectId(req.user?._id)
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
                         $addFields: {
-                            product: {
-                                $first: "$product"
-                            },
-                            deliveryAddress: {
-                                $first: "$deliveryAddress"
-                            }
+                            productDetails: { $first: "$productDetails" },
+                            deliveryAddress: { $first: "$deliveryAddress" }
                         }
                     },
                     {
                         $project: {
-                            product: 1,
+                            productDetails: 1,
                             deliveryAddress: 1
                         }
                     }
                 ]
             }
         },
-        {
-            $addFields: {
-                CurruntOrder: {
-                    $first: "$curruntOrder"
-                }
-            }
-        },
+        { $addFields: { orderDetails: { $first: "$orderDetails" } } },
         {
             $project: {
-                CurruntOrder: 1,
+                _id:1,
+                orderDetails: 1,
                 status: 1,
                 statusLocation: 1
             }
         }
+    ]);
+    
+
+    res.status(200).json(new ApiResponse(200, userCurruntOrder, "Current Order"));
+});
+
+
+const getCurruntOrderDetails = asyncHandler(async (req, res) => {
+    const {orderId} = req.params
+
+    const userCurruntOrderDetails = await CurruntOrder.aggregate([
+        {
+            $match:{
+                _id:new mongoose.Types.ObjectId(orderId)
+            }
+        },
+        {
+           $lookup:{
+            from:"orders",
+            localField:"curruntOrder",
+            foreignField:"_id",
+            as:"curruntOrder",
+            pipeline:[
+                {
+                    $lookup: {
+                        from: "products",
+                        localField: "product",
+                        foreignField: "_id",
+                        as: "product",
+                        pipeline: [
+                            {
+                                $project: {
+                                    name: 1,
+                                    productId: 1,
+                                    price: 1,
+                                    featuedImages: 1,
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "useraddresses",
+                        localField: "userDeliveryAddress",
+                        foreignField: "_id",
+                        as: "userDeliveryAddress",
+                        pipeline: [
+                            {
+                                $project: {
+                                    name: 1,
+                                    addressLine1: 1,
+                                    addressLine2: 1,
+                                    city: 1,
+                                    postalCode: 1,
+                                    state: 1,
+                                    country: 1,
+                                    mobileNumber: 1
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $addFields: {
+                        product: {
+                            $first: "$product"
+                        },
+                        userDeliveryAddress: {
+                            $first: "$userDeliveryAddress"
+                        },
+                    }
+                },
+                {
+                    $project: {
+                        product: 1,
+                        quntity: 1,
+                        userDeliveryAddress: 1
+                    }
+                }
+            ]
+           } 
+        },
+        {
+            $addFields:{
+                curruntOrder:{
+                    $first:"$curruntOrder"
+                }
+            }
+        },
+        {
+            $project:{
+                curruntOrder:1,
+                status:1,
+                statusLocation:1
+            }
+        }
     ])
 
-    // const curruntOrders = await CurruntOrder.aggregate([
-    //     {
-    //         $match: {
-    //             _id: new mongoose.Types.ObjectId(orderId)
-    //         }
-    //     },
-    //     {
-    //         $lookup: {
-    //             from: "orders",
-    //             localField: "curruntOrder",
-    //             foreignField: "_id",
-    //             as: "CurruntOrder",
-    //             pipeline: [
-    //                 {
-    //                     $lookup: {
-    //                         from: "products",
-    //                         localField: "product",
-    //                         foreignField: "_id",
-    //                         as: "curruntOrderProduct",
-    //                         pipeline: [
-    //                             {
-    //                                 $lookup: {
-    //                                     from: "categories",
-    //                                     localField: "category",
-    //                                     foreignField: "_id",
-    //                                     as: "curruntOrderProductcatagory",
-    //                                     pipeline: [
-    //                                         {
-    //                                             $project: {
-    //                                                 name: 1
-    //                                             }
-    //                                         }
-    //                                     ]
-    //                                 }
-    //                             },
-    //                             {
-    //                                 $addFields: {
-    //                                     curruntOrderProductcatagory: {
-    //                                         $first: "$curruntOrderProductcatagory"
-    //                                     }
-    //                                 }
-    //                             },
-    //                             {
-    //                                 $project: {
-    //                                     name: 1,
-    //                                     productId: 1,
-    //                                     price: 1,
-    //                                     featuedImages: 1,
-    //                                     curruntOrderProductcatagory: 1
-    //                                 }
-    //                             }
-    //                         ]
-    //                     },
-
-    //                 },
-    //                 {
-    //                     $lookup: {
-    //                         from: "useraddresses",
-    //                         localField: "userDeliveryAddress",
-    //                         foreignField: "_id",
-    //                         as: "curruntOrdersdelivryaddress",
-    //                         pipeline: [
-    //                             {
-    //                                 $project: {
-    //                                     addressLine1: 1,
-    //                                     addressLine2: 1,
-    //                                     city: 1,
-    //                                     postalCode: 1,
-    //                                     state: 1,
-    //                                     country: 1,
-    //                                     mobileNumber: 1
-    //                                 }
-    //                             }
-    //                         ]
-    //                     }
-    //                 },
-    //                 {
-    //                     $addFields: {
-    //                         curruntOrderProduct: {
-    //                             $first: "$curruntOrderProduct"
-    //                         },
-    //                         curruntOrdersdelivryaddress: {
-    //                             $first: "$curruntOrdersdelivryaddress"
-    //                         },
-
-    //                     }
-    //                 },
-    //                 {
-    //                     $project: {
-    //                         curruntOrderProduct: 1,
-    //                         curruntOrdersdelivryaddress: 1
-    //                     }
-    //                 }
-    //             ]
-    //         }
-    //     },
-    //     {
-    //         $addFields: {
-    //             CurruntOrder: {
-    //                 $first: "$CurruntOrder"
-    //             }
-    //         }
-    //     },
-    //     {
-    //         $project: {
-    //             CurruntOrder: 1,
-    //             status: 1,
-    //             statusLocation: 1
-    //         }
-    //     }
-    // ])
-
     res
-        .status(200)
-        .json(
-            new ApiResponse(
-                200,
-                userCurruntOrder[0],
-                "Currunt Order"
-            )
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            userCurruntOrderDetails,
+            "User CurruntOrder Details"
         )
+    )
 })
 
 const catagoryDetailsOrListOfCatagorysProduct = asyncHandler(async (req, res) => {
@@ -933,8 +981,6 @@ const getAllCatagories = asyncHandler(async (_, res) => {
             }
         }
     ])
-
-    console.log(getAllCatagories);
 
     res
         .status(200)
@@ -1059,24 +1105,53 @@ const getAllProducts = asyncHandler(async (_, res) => {
         .json(
             new ApiResponse(
                 201,
-                AllProducts[0],
+                AllProducts,
                 "Catagories Details"
             )
         )
 })
 
 const findUserAddress = asyncHandler(async (req, res) => {
-    const { orderId } = req.params
-
-    const AddressDetails = await UserAddress.aggregate([
-        { $match: { _id: new mongoose.Types.ObjectId(orderId) } },
-        { $project: { addressLine1: 1, addressLine2: 1, city: 1, postalCode: 1, state: 1, country: 1, mobileNumber: 1 } }
+    const { userId } = req.params
+    
+    const AddressDetails = await User.aggregate([
+        { $match: 
+            { 
+                _id: new mongoose.Types.ObjectId(userId) 
+            } 
+        },
+        {
+            $lookup :{
+                from:"useraddresses",
+                localField:"address",
+                foreignField:"_id",
+                as:"address",
+                pipeline:[
+                    {
+                        $project:{
+                            addressLine1: 1, 
+                            addressLine2: 1, 
+                            city: 1, 
+                            postalCode: 1, 
+                            state: 1, 
+                            country: 1, 
+                            mobileNumber: 1
+                        }
+                    }
+                ]
+            }
+        },
+        { $project: 
+            { 
+                address: 1 
+            } 
+        }
 
     ])
 
     res.status(200).json(new ApiResponse(
         201,
-        AddressDetails[0],
+        AddressDetails,
         "Your Address Details"
     ))
 })
@@ -1102,5 +1177,7 @@ export {
     getProductsDetails,
     getCurruntOrder,
     getAllProducts,
-    findUserAddress
+    findUserAddress,
+    getUserOrderDetails,
+    getCurruntOrderDetails
 }

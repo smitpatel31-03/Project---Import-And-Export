@@ -9,7 +9,7 @@ export const verifyJWTAdmin = asyncHandler(async(req,_,next)=>{
         //decode token
         //find admin
         //declared admin
-                       
+                
         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","")
         
         

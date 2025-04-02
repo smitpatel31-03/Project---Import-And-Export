@@ -1,0 +1,33 @@
+import React,{useEffect,useState} from 'react'
+import { useParams } from 'react-router';
+import service from '../services/config.js';
+import { ProductFeatureImage } from '../components/index.js';
+
+function ChangeProductFeatureImage() {
+    const {id} = useParams()
+    const [product,setProduct] = useState()
+  
+    useEffect(() => {
+      const fetchProductData = async () => {
+          try {
+              const prod = await service.getProductsDetails(id);
+              if (prod) {
+                setProduct(prod);
+              }
+          } catch (error) {
+              console.error("Error fetching product details:", error);
+          }
+  
+      };
+  
+      fetchProductData();
+  }, [id]);
+  return (
+    <div>
+      <ProductFeatureImage Product={product}/>
+      
+    </div>
+  )
+}
+
+export default ChangeProductFeatureImage

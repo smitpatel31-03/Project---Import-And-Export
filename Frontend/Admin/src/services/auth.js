@@ -77,7 +77,7 @@ export class AuthServices {
        try {
 
         const headers = this.getAuthHeaders()
-        
+                
          const response = await this.axiosInstance.post(`${this.API_URL}/logout`,{headers})
  
          localStorage.removeItem("accessToken",accessToken)
@@ -158,6 +158,11 @@ export class AuthServices {
     }
 
     getAuthHeaders() {
+        const token = localStorage.getItem("accessToken");
+        return token ? { Authorization: `Bearer ${token}` } : {};
+    }
+
+    getAuthHeadersImage() {
         const token = localStorage.getItem("accessToken");
         return token ? { Authorization: `Bearer ${token}` } : {};
     }

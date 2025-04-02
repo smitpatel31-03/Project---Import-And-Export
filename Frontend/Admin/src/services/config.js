@@ -15,20 +15,39 @@ export class Service{
 
     async addCatagory({name, description,image}){
         try {            
-            const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.post(`${this.API_URL}/addCatagory`,{name, description,image},{headers})
+            const headers = {
+                ...authServices.getAuthHeadersImage(),
+                "Content-Type": "multipart/form-data",
+            };
+            image = image[0]            
 
-            return response.data
+            console.log('herar working');
+            
+            const response = await this.axiosInstance.post(`${this.API_URL}/addCatagory`,{name, description,image}, {headers})
+
+            
+            return response.data.data
         } catch (error) {
             throw error.response?.data?.message || "Something Went Wrong While Adding Catagory"
         }
     }
 
-    async addProduct(catagoryId,{name, price, description, category, stock, owner, productId}){
+    async addProduct(catagoryId,{name,featuedImages , price, description, category, stock, owner, productId}){
+        
+        
         try {
-            const headers = authServices.getAuthHeaders()
+            const headers = {
+                ...authServices.getAuthHeadersImage(),
+                "Content-Type": "multipart/form-data",
+            };
+
+            featuedImages = featuedImages[0]
+
+            console.log(name,featuedImages , price, description, category, stock, owner, productId);
+            
+
             const response = await this.axiosInstance.post(`${this.API_URL}/addProduct/${catagoryId}`,
-                {name, price, description, category, stock, owner, productId},
+                {name, price, description, category, stock, owner, productId,featuedImages},
                 {headers})
             
             return response.data
@@ -66,7 +85,14 @@ export class Service{
 
     async changeCatagoryImage(catagoryId,{image}){
         try {
-            const headers = authServices.getAuthHeaders()
+            const headers = {
+                ...authServices.getAuthHeadersImage(),
+                "Content-Type": "multipart/form-data",
+            };
+
+            console.log(image);
+            
+            image = image[0]  
             const response = await this.axiosInstance.patch(`${this.API_URL}/changeCatagoryImage/${catagoryId}`,{image},{headers})
 
             return response.data.data
@@ -75,10 +101,14 @@ export class Service{
         }
     }
 
-    async changeProductImage(productId,{image}){
+    async changeProductImage(productId,{featuedImages}){
         try {
-            const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.patch(`${this.API_URL}/changeProductImage/${productId}`,{featuedImages},{headers})
+            const headers = {
+                ...authServices.getAuthHeadersImage(),
+                "Content-Type": "multipart/form-data",
+            };
+            featuedImages = featuedImages[0]  
+            const response = await this.axiosInstance.patch(`${this.API_URL}/changeProductFeatureImage/${productId}`,{featuedImages},{headers})
 
             return response.data
         } catch (error) {
@@ -88,7 +118,11 @@ export class Service{
 
     async addImagesToProduct(productId,{image}){
         try {
-            const headers = authServices.getAuthHeaders()
+            const headers = {
+                ...authServices.getAuthHeadersImage(),
+                "Content-Type": "multipart/form-data",
+            };
+              
             const response = await this.axiosInstance.patch(`${this.API_URL}/addPhotosToProduct/${productId}`,{image},{headers})
 
             return response.data

@@ -1,25 +1,30 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import service from '../../services/config.js'
 import { useNavigate, useParams } from 'react-router'
 import { useForm } from 'react-hook-form'
 import { Button, Input } from '../index.js'
+import { useSelector } from 'react-redux'
 
 function ProductForm({ Product }) {
     const { id: categoryId } = useParams()
     const navigate = useNavigate()
-
-    // Initialize the form with default values
-    const { register, handleSubmit } = useForm({
-        defaultValues: {
-            name: Product?.name || "",
-            price: Product?.price || "",
-            description: Product?.description || "",
-            category: categoryId || "",
-            stock: Product?.stock || "",
-            owner: Product?.owner || "",
-            productId: Product?.productId || "",
+    const { register, handleSubmit, reset } = useForm()
+    const admin = useSelector((state) => state.auth.userData);
+    
+    useEffect(()=>{
+        if(Product){
+            reset({
+                name: Product?.name || "",
+                price: Product?.price || "",
+                description: Product?.description || "",
+                category: categoryId || "",
+                stock: Product?.stock || "",
+                owner: Product?.owner || "",
+                productId: Product?.productId || "",
+            })
         }
-    })
+    },[Product,categoryId,reset])
+    
 
     const submit = async (data) => {
         if (Product) {
@@ -60,6 +65,12 @@ function ProductForm({ Product }) {
                         className='mb-4'
                         {...register("description", { required: true })}
                     />
+                    <Input
+                        label="Category: "
+                        value={categoryId}
+                        className='mb-4'
+                        {...register("category", { required: true })}
+                    />
 
                     <Input
                         label="Stock: "
@@ -77,13 +88,22 @@ function ProductForm({ Product }) {
                     />
 
                     {!Product && (
+                        <>
                         <Input
                             label="Category Image:"
                             type="file"
                             className="mb-4"
                             accept="image/png, image/jpg, image/jpeg, image/gif"
-                            {...register("image", { required: !Product })}
+                            {...register("featuedImages", { required: !Product })}
                         />
+
+                        <Input
+                        label="Owner: "
+                        value={admin}
+                        className='mb-4'
+                        {...register("owner")}
+                        />
+                    </>
                     )}
 
                     <Button type="submit" bgColor={Product ? "bg-green-500" : undefined} className="w-full">

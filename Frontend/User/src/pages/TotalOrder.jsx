@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import services from '../services/config';
-import { CurruntOrderCard } from '../components/index.js';
+import { OrderCard } from '../components/index.js';
 import { Link } from 'react-router';
 
-function Order() {
+function TotalOrder() {
     const [order, setOrder] = useState([]);
 
     useEffect(() => {
         const fetchOrder = async () => {
             try {
-                const ord = await services.getCurruntOrder();
+                const ord = await services.getOrder();
             
-                
                 if(Array.isArray(ord)){
-                    setOrder(ord)
+                    setOrder(ord[0]?.totalorders)
                 }
                 else if(ord){
-                    setOrder([ord])
+                    setOrder([ord[0]?.totalorders])
                 }
                 else{
                     setOrder([])
@@ -29,7 +28,7 @@ function Order() {
         fetchOrder();
     }, []);
 
-    console.log("order :",order);
+    console.log(order);
 
     
     
@@ -44,8 +43,8 @@ function Order() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {order?.length > 0 ? (
                         order?.map((item, index) => (
-                            <Link to={`/curruntOrderDetails/${item._id}`}>
-                                <CurruntOrderCard key={index} order={item} />
+                            <Link to={`/orderDetails/${item?._id}`}>
+                                <OrderCard key={index} order={item} />
                             </Link>
                         ))
                     ) : (
@@ -57,4 +56,4 @@ function Order() {
     );
 }
 
-export default Order;
+export default TotalOrder;

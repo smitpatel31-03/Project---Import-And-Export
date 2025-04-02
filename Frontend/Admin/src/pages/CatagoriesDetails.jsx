@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ProductCard, Container,Button } from '../components/index.js';
 import service from '../services/config.js';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import{ ChangeCatagoryDetail } from './index.js';
 
 function CategoriesDetails() {
@@ -10,6 +10,8 @@ function CategoriesDetails() {
     const [products, setProducts] = useState([]);
     const [showComponent, setShowComponent] = useState()
 
+    const navigate = useNavigate()
+    
     useEffect(() => {
         const fetchCategoryDetails = async () => {
             const data = await service.catagoryDetailsOrListOfCatagorysProduct(id);
@@ -28,6 +30,9 @@ function CategoriesDetails() {
     const handleShowComponent = (type) => {
         setShowComponent(type)
     }
+
+    console.log(category);
+    
 
     return (
         <div className="bg-gray-900 w-full min-h-screen text-white p-6">
@@ -54,9 +59,7 @@ function CategoriesDetails() {
                 
                 {/* Right Section - Details */}
                 <div className="w-full lg:w-1/3 p-4 bg-gray-700 rounded-lg shadow-md">
-                    <p className="text-lg"><strong>Price:</strong> <span className="text-green-400">$100</span></p>
-                    <p className="text-lg"><strong>Product ID:</strong> <span className="font-bold">C01</span></p>
-                    <p className="text-lg"><strong>Stock:</strong> <span className="font-bold">9999498</span></p>
+                    <p className="text-lg"><strong>Name:</strong> <span className="text-green-400">{category.name}</span></p>
                 </div>
             </div>
 
@@ -65,11 +68,11 @@ function CategoriesDetails() {
             </div>
             
             <div className="flex gap-4 mt-6">
-                <Button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md" onClick={()=>handleShowComponent('details')}>Update Category</Button>
-                <Button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md" onClick={()=>handleShowComponent('image')}>Change Image</Button>
+                <Button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md" onClick={()=>navigate(`/changeCatagoryDetails/${category?._id}`)}>Update Category</Button>
+                <Button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md" onClick={()=>navigate(`/ChangeCatagoryImage/${category?._id}`)}>Change Image</Button>
                 <Button 
                         className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
-                        onClick={() => navigate(`/add-product/${id}`)}
+                        onClick={() => navigate(`/addProduct/${id}`)}
                     >
                         + Add Product
                     </Button>
@@ -77,12 +80,12 @@ function CategoriesDetails() {
             
             <Container>
                 <h2 className="text-3xl font-bold mb-6 mt-10 text-gray-100 border-b border-gray-700 pb-2">Products</h2>
-                {products.length === 0 ? (
-                    <div className="p-6 text-xl font-semibold text-gray-400">No Products Found</div>
+                {products.length === 0 || products[0] === undefined   ? (
+                    <div className="text-xl font-semibold text-gray-400">No Products Found</div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {products.map((prod) => (
-                            <ProductCard key={prod._id} {...prod} />
+                            <ProductCard key={prod?._id} product={prod} />
                         ))}
                     </div>
                 )}

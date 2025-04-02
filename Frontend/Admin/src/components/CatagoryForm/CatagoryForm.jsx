@@ -1,30 +1,30 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { useForm } from 'react-hook-form'
 import { Button, Input } from "../index.js"
 import { useNavigate } from 'react-router'
-import services from "../../services/config.js"
 
 
 function CatagoryForm({ catagory }) {
+    const { register, handleSubmit, reset } = useForm({});
+
+    console.log(catagory);
+    
+  
+    useEffect(()=>{
+       if(catagory){
+        reset({
+                name: catagory?.name || "",
+                description: catagory?.description || "",
+        })
+       }
+    },[catagory?._id])
 
     
-    const { register, handleSubmit } = useForm({
-        defaultValues: {
-            name: catagory?.name || "",
-            description: catagory?.description || "",
-        }
-    });
 
 
     const navigate = useNavigate();
 
     // Handle Image Change Manually
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setValue("image", file); // Update the image value manually
-        }
-    };
 
     const submit = async (data) => {
         try {
@@ -69,7 +69,7 @@ function CatagoryForm({ catagory }) {
                             type="file"
                             accept="image/png, image/jpg, image/jpeg, image/gif"
                             className="mb-4 p-2 border rounded w-full"
-                            onChange={handleImageChange}
+                            {...register("image",{required:true})}
                         />
                     </>
                 )}

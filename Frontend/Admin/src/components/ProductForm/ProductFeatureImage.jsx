@@ -4,13 +4,15 @@ import { useNavigate } from 'react-router'
 import { useForm } from 'react-hook-form'
 import { Button, Input } from '../index.js'
 
-function ProductFeatureImage({ product }) {
+function ProductFeatureImage({ Product }) {
     const { register, handleSubmit } = useForm()
 
+    console.log('product :',Product);
+    
     const navigate = useNavigate()
 
-    const submit = async () => {
-        const dbProduct = await service.changeProductImage(product._id, { ...data })
+    const submit = async (data) => {
+        const dbProduct = await service.changeProductImage(Product._id, {...data})
 
         if (dbProduct) navigate(`/`)
     }
@@ -24,10 +26,12 @@ function ProductFeatureImage({ product }) {
                         type="file"
                         className="mb-4"
                         accept="image/png, image/jpg, image/jpeg, image/gif"
-                        {...register("image", { required: true })}
+                        {...register("featuedImages", { required: true })}
                     />
 
-                    <Button type="submit" bgColor={product ? "bg-green-500" : undefined} className="w-full">
+                    <img src={Product?.featuedImages} alt={Product?.name} />
+
+                    <Button type="submit" bgColor={Product ? "bg-green-500" : undefined} className="w-full">
                         Upload
                     </Button>
 

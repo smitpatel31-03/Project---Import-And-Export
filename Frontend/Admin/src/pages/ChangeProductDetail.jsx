@@ -1,38 +1,32 @@
-import React,{useState} from "react";
-import {ProductForm,ProductFeatureImage,
-  ProductPhotos} from '../components/index.js'
+import React,{useEffect,useState} from 'react'
+import {ProductForm} from '../components/index.js'
+import { useParams } from 'react-router';
+import service from '../services/config.js';
 
-function ChangeProductDetail({ product, initialDetail = false, initialImage = false, initialPhotos = false }) {
-  const [detail, setDetail] = useState(initialDetail)
-  const [image, setImage] = useState(initialImage)
-  const [photos, setPhotos] = useState(initialPhotos)
+function ChangeProductDetail() {
+  const {id} = useParams()
+  const [product,setProduct] = useState()
 
-  if(detail){
-    return(
+  useEffect(() => {
+    const fetchProductData = async () => {
+        try {
+            const prod = await service.getProductsDetails(id);
+            if (prod) {
+              setProduct(prod);
+            }
+        } catch (error) {
+            console.error("Error fetching product details:", error);
+        }
 
+    };
+
+    fetchProductData();
+}, [id]);
+  return (
+    <div>
       <ProductForm Product={product}/>
-    )
-  }
-  else if(image){
-    return(
-
-      <ProductFeatureImage product={product} />
-    )
-  }
-  else if(photos){
-    return(
-
-      <ProductPhotos product={product}/>
-    )
-  }
-  else{
-    return(
-      <div className='w-full h-screen bg-zinc-800 flex flex-wrap justify-center items-center'>
-                <p className="text-white text-lg">No product selected</p>
-            </div>
-    )
-  }
-
+    </div>
+  )
 }
 
-export default ChangeProductDetail;
+export default ChangeProductDetail

@@ -28,6 +28,9 @@ function Dashboard() {
     fetchData();
   }, []);
 
+  console.log(catagory);
+  
+
   
 
   return (
@@ -40,7 +43,7 @@ function Dashboard() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {catagory.map((cat) => (
-              <CatagoriesCard key={cat._id} {...cat} />
+              <CatagoriesCard key={cat._id} Catagory={cat} />
             ))}
           </div>
         )}
@@ -55,7 +58,7 @@ function Dashboard() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {product.map((prod) => (
-              <ProductCard key={prod._id} {...prod} />
+              <ProductCard key={prod._id} product={prod} />
             ))}
           </div>
         )}

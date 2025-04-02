@@ -42,16 +42,40 @@ export class Services  {
         }
     }
 
-    async getOrderDetails(orderId){
+    async getCurruntOrder(){
         try {
+            
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.APT_URL}/getCurruntOrder/${orderId}`,{headers})
+            const response = await this.axiosInstance.get(`${this.APT_URL}/getCurruntOrder`,{headers})
 
-            console.log(response.data);
 
-            return response.data
+            return response.data.data
             
 
+        } catch (error) {
+            throw error.response?.data?.message || "Can not Get Order Details"
+        }
+    }
+
+    async getCurruntOrderDetails(orderId){
+        try {
+            
+            const headers = authServices.getAuthHeaders()
+            const response = await this.axiosInstance.get(`${this.APT_URL}/getCurruntOrderDetails/${orderId}`,{headers})
+
+            return response.data.data[0]
+        } catch (error) {
+            throw error.response?.data?.message || "Can not Get Order Details"
+        }
+    }
+
+    async getUserOrderDetails(orderId){
+        try {
+            
+            const headers = authServices.getAuthHeaders()
+            const response = await this.axiosInstance.get(`${this.APT_URL}/getUserOrderDetails/${orderId}`,{headers})
+
+            return response.data.data[0]
         } catch (error) {
             throw error.response?.data?.message || "Can not Get Order Details"
         }
@@ -92,8 +116,6 @@ export class Services  {
         try {
             const headers = authServices.getAuthHeaders()
             const response = await this.axiosInstance.get(`${this.APT_URL}/getProductsDetails/${productId}`,{headers})
-
-            console.log(response.data);
 
             return response.data.data
             

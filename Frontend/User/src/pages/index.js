@@ -12,6 +12,9 @@ import EditDetails from "./EditDetails";
 import CatagoryDetail from './CatagoryDetail'
 import ProductDetails from "./ProductDetails";
 import BookProduct from "./BookProduct";
+import OrderDetails from "./OrderDetails";
+import TotalOrder from './TotalOrder'
+import CurruntOrderDetails from './CurruntOrderDetails'
 
 export{
     Home,
@@ -27,5 +30,8 @@ export{
     EditDetails,
     CatagoryDetail,
     ProductDetails,
-    BookProduct
+    BookProduct,
+    OrderDetails,
+    TotalOrder,
+    CurruntOrderDetails
 }

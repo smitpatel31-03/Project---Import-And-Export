@@ -4,7 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import { AuthLayout } from './components/index.js'
 import { createBrowserRouter,RouterProvider } from 'react-router'
-import {Home,Login,Signup,Catagories,Product,Order,User, UserAddress,ChangePassword,EditDetails,CatagoryDetail,ProductDetails,BookProduct} from "./pages/index.js"
+import {Home,Login,Signup,Catagories,Product,Order,User, UserAddress,ChangePassword,EditDetails,CatagoryDetail,ProductDetails,BookProduct,TotalOrder,CurruntOrderDetails,OrderDetails} from "./pages/index.js"
 import { Provider } from 'react-redux'
 import store from './Store/store.js'
 
@@ -123,6 +123,30 @@ const router = createBrowserRouter([
       element:(
         <AuthLayout>
           <BookProduct />
+          </AuthLayout>
+      ) 
+    },
+    {
+      path:"/totalOrders",
+      element:(
+        <AuthLayout>
+          <TotalOrder />
+          </AuthLayout>
+      ) 
+    },
+    {
+      path:"/curruntOrderDetails/:id",
+      element:(
+        <AuthLayout>
+          <CurruntOrderDetails />
+          </AuthLayout>
+      ) 
+    },
+    {
+      path:"/orderDetails/:id",
+      element:(
+        <AuthLayout>
+          <OrderDetails />
           </AuthLayout>
       ) 
     },

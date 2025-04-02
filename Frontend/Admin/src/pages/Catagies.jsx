@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import service from '../services/config.js';
-import { CatagoriesCard, Container, CatagoryForm,Button } from '../components/index.js';
-
+import { CatagoriesCard, Container,Button } from '../components/index.js';
+import {useNavigate} from 'react-router'
 
 function Catagies() {
     const [categories, setCategories] = useState([]);
-    const [formStatus,setFormStatus] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchCategories = async () => {
             try {
                 const data = await service.getAllCatagories();
 
+                
                 if (Array.isArray(data)) {
                     setCategories(data);
                 } else {
@@ -22,8 +23,13 @@ function Catagies() {
             }
         };
 
+        
+
         fetchCategories();
     }, []);
+
+    
+    
 
     return (
         <div className="w-full min-h-screen text-center bg-zinc-800 text-white p-6">
@@ -32,7 +38,7 @@ function Catagies() {
                     <h1 className="text-3xl font-bold">Categories</h1>
                     <Button
                         className="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                        onClick={() => setFormStatus(true)}
+                        onClick={() => navigate(`/addCatagory`)}
                     >
                         + Add Category
                     </Button>
@@ -46,18 +52,14 @@ function Catagies() {
                 ) : (
                     <div className="flex flex-wrap">
                         {categories.map((category) => (
-                            <div key={category._id} className="p-2 w-1/4">
-                                <CatagoriesCard {...category} />
+                            <div key={category?._id} className="p-2 w-1/4">
+                                <CatagoriesCard Catagory={category} />
                             </div>
                         ))}
                     </div>
                 )}
             </Container>
-            {formStatus &&
-                <div>
-                   <CatagoryForm /> 
-                </div>
-            }
+           
         </div>
     );
 }

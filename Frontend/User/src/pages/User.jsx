@@ -43,15 +43,18 @@ function User() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-center gap-4 mb-6">
-          <Button className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 flex items-center gap-2 " onClick={()=> navigate(`/changeUserDetails`)}>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg flex items-center gap-2 justify-center" onClick={() => navigate(`/changeUserDetails`)}>
             ✏️ Edit Details
           </Button>
-          <Button className="px-4 py-2 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 flex items-center gap-2" onClick={()=> navigate(`/changePassword`)}>
+          <Button className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg flex items-center gap-2 justify-center" onClick={() => navigate(`/changePassword`)}>
             🔒 Change Password
           </Button>
-          <Button className="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 flex items-center gap-2" onClick={() => navigate(`/addAddress`)}>
+          <Button className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg flex items-center gap-2 justify-center" onClick={() => navigate(`/addAddress`)}>
             ➕ Add Address
+          </Button>
+          <Button className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg flex items-center gap-2 justify-center" onClick={() => navigate(`/totalOrders`)}>
+            📦 Total Orders
           </Button>
         </div>
 
@@ -62,15 +65,15 @@ function User() {
         <div className="grid gap-6">
           {userDeliveryAddress.length > 0 ? (
             userDeliveryAddress.map((address, index) => (
-              <div key={index}>
+              <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-md">
                 <AddressCard address={address} />
-                <Button onClick={() => navigate(`/UpdateAddressDetails/${address._id}`)}>
-                  Update Address
+                <Button className="mt-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg" onClick={() => navigate(`/UpdateAddressDetails/${address._id}`)}>
+                  ✏️ Update Address
                 </Button>
               </div>
             ))
           ) : (
-            <p className="text-gray-500">No saved addresses.</p>
+            <p className="text-gray-500 text-center italic">No saved addresses yet. Add one to get started! 📍</p>
           )}
         </div>
       </div>

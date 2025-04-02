@@ -186,6 +186,8 @@ const logoutAdmin = asyncHandler(async (req, res) => {
     //find admin
     //remove refresh token from database
 
+    console.log("req.admin._id :",req.admin._id);
+    
     await Admin.findByIdAndUpdate(
         req.admin._id,
         {
@@ -202,7 +204,7 @@ const logoutAdmin = asyncHandler(async (req, res) => {
         httpOnly: true,
         secured: true
     }
-
+    
     //remove cookie
     return res.status(201)
         .cookie("accessToken", options)
@@ -406,14 +408,18 @@ const addCatagory = asyncHandler(async (req, res) => {
     if (!name || !description) {
         throw new ApiError(401, "All Fileds Are Required");
     }
-
-    const imageLocalPath = req.files?.path
-
+    
+    const imageLocalPath = req.file
+    
     const image = await uploadOnCloudnary(imageLocalPath)
+    
+    
     
     if (!image) {
         throw new ApiError(401, "Image is requird")
     }
+
+    
     
     const catagory = await Category.create({
         name,
@@ -440,7 +446,7 @@ const addProduct = asyncHandler(async (req, res) => {
         throw new ApiError(401, "All Fileds Are Required");
     }
 
-    const imageLocalPath = req.file?.path
+    const imageLocalPath = req.file
 
     const featuedImages = await uploadOnCloudnary(imageLocalPath)
 
@@ -580,13 +586,11 @@ const changeProductDetails = asyncHandler(async (req, res) => {
 const changeProductFeatureImage = asyncHandler(async (req, res) => {
     const { productId } = req.params
 
-    const imageLocalPath = req.files?.image[0]?.path
+    const imageLocalPath = req.file
 
     const featuedImages = await uploadOnCloudnary(imageLocalPath)
     
-
-
-    if (!image) {
+    if (!featuedImages) {
         throw new ApiError(401, "Image is requird")
     }
 
@@ -650,7 +654,13 @@ const changeCatagoryDetails = asyncHandler(async (req, res) => {
 const changeCatagoryImage = asyncHandler(async (req, res) => {
     const { catagoryId } = req.params
 
-    const imageLocalPath = req.files?.image[0]?.path
+    console.log(req.file);
+    
+
+    const imageLocalPath = req.file
+
+    console.log('imageLocalPath :',imageLocalPath);
+    
 
     const image = await uploadOnCloudnary(imageLocalPath)
 
@@ -685,10 +695,7 @@ const changeCatagoryImage = asyncHandler(async (req, res) => {
 const updateOrderDetails = asyncHandler(async (req, res) => {
     const { orderId } = req.params
     const { status, statusLocation } = req.body
-
-    console.log('orderId :',orderId);
     
-
     if (status === "DELIVERED" || status === "CANCELLED" || status === "FAILED") {
         await CurruntOrder.findByIdAndDelete(orderId)
 
@@ -986,34 +993,9 @@ const getAllProducts = asyncHandler(async (_,res)=>{
 
     const AllProducts = await Product.aggregate([
         {
-            $lookup: {
-                from: "categories",
-                localField: "category",
-                foreignField: "_id",
-                as: "categories",
-                pipeline: [
-                    {
-                        $project: {
-                            name: 1
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            $addFields: {
-                categories: {
-                    $first: "$categories"
-                }
-            }
-        },
-        {
             $project: {
-                categories: 1,
                 name: 1,
-                description: 1,
                 featuedImages: 1,
-                photos:1,
                 productId:1,
                 price:1
             }
@@ -1025,7 +1007,7 @@ const getAllProducts = asyncHandler(async (_,res)=>{
         .json(
             new ApiResponse(
                 201,
-                AllProducts[0],
+                AllProducts,
                 "Catagories Details"
             )
         )

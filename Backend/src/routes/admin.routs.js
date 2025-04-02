@@ -1,6 +1,6 @@
 import { Router } from "express"
 import {
-    registerAdmin, loginAdmin, logoutAdmin, getCurruntAdmin,addPhotosToProduct, AdminsRefreshAccessToken, addCatagory, addProduct, changeProductDetails, changeCatagoryDetails, updateOrderDetails, changeAdminCurruntPassword, changeAdminRole, changeAdminDetails,changeProductFeatureImage,
+    registerAdmin, loginAdmin, logoutAdmin, getCurruntAdmin,addPhotosToProduct, AdminsRefreshAccessToken, addCatagory, addProduct, changeProductDetails, changeCatagoryDetails, updateOrderDetails, changeAdminCurruntPassword, changeAdminRole, changeAdminDetails,changeProductFeatureImage,changeCatagoryImage,
 
     //get request
     getCurruntOrders, catagoryDetailsOrListOfCatagorysProduct, getAllCatagories, getProductsDetails, getAdminDetails,getOrderDetails,
@@ -15,13 +15,20 @@ router.route("/register").post(registerAdmin)
 router.route("/login").post(loginAdmin)
 router.route("/logout").post(verifyJWTAdmin, logoutAdmin)
 router.route("/refresh-token").post(AdminsRefreshAccessToken)
-router.route("/addCatagory").post(verifyJWTAdmin,upload.single("image"),addCatagory)
+router.route("/addCatagory").post(
+    (req, res, next) => {next();},
+    verifyJWTAdmin,
+    upload.single("image"),
+    (req, res, next) => {next();},
+    addCatagory);
+
+
 router.route("/addProduct/:catagoryId").post(verifyJWTAdmin,upload.single("featuedImages"),addProduct)
 
 //patch Routs
 router.route("/addPhotosToProduct/:productId").patch(verifyJWTAdmin,upload.array("image",10),addPhotosToProduct)
-router.route("/changeCatagoryImage/:catagoryId").patch(verifyJWTAdmin,upload.single("image"),addCatagory)
-router.route("/changeProductFeatureImage/:productId").patch(verifyJWTAdmin,upload.single("image"),changeProductFeatureImage)
+router.route("/changeCatagoryImage/:catagoryId").patch((req, res, next) => {next();},verifyJWTAdmin,upload.single("image"),(req, res, next) => {next();},changeCatagoryImage)
+router.route("/changeProductFeatureImage/:productId").patch((req, res, next) => {next();},verifyJWTAdmin,upload.single("featuedImages"),(req, res, next) => {next();},changeProductFeatureImage)
 router.route("/changeCatagoryDetails/:catagoryId").patch(verifyJWTAdmin, changeCatagoryDetails)
 router.route("/changeProductDetails/:productId").patch(verifyJWTAdmin, changeProductDetails)
 router.route("/updateOrderDetails/:orderId").patch(verifyJWTAdmin, updateOrderDetails)

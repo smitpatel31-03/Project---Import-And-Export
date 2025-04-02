@@ -11,6 +11,11 @@ import Admin from "./Admin";
 import ChangeAdminDetail from "./ChangeAdminDetail";
 import ChangeProductDetail from './ChangeProductDetail'
 import ChangeCatagoryDetail from "./ChangeCatagoryDetail";
+import UpdateOrderDetails from "./UpdateOrderDetails";
+import AddCatagory from "./AddCatagory";
+import ChangeCatagoryImage from './ChangeCatagoryImage'
+import AddProduct from "./AddProduct";
+import ChangeProductFeatureImage from './ChangeProductFeatureImage'
 
 export{
     Catagies,
@@ -25,5 +30,10 @@ export{
     Admin,
     ChangeAdminDetail,
     ChangeProductDetail,
-    ChangeCatagoryDetail
+    ChangeCatagoryDetail,
+    UpdateOrderDetails,
+    AddCatagory,
+    ChangeCatagoryImage,
+    AddProduct,
+    ChangeProductFeatureImage
 }
