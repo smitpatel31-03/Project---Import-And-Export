@@ -24,7 +24,7 @@ function Home() {
      <div className="container mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 text-center md:text-left">
               <h1 className="text-4xl md:text-5xl font-bold text-blue-900">
-              Savi<span className="text-black">Import And Export</span>
+              Savi<span className="text-black">Import And Export.</span>
               </h1>
               <p className="text-lg text-blue-700 mt-2 font-semibold">
                 Connecting Worlds, Exporting Opportunities!!
