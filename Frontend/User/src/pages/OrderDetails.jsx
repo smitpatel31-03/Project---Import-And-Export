@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import services from '../services/config';
 
-function OrderDetails({order}) {
+function OrderDetails() {
   const [orderDetails, setOrderDetails] = useState()
 
   const {id} = useParams()
