@@ -9,6 +9,7 @@ import { loadScript } from "@paypal/paypal-js";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import conf from "../conf/conf.js";
 
+
 function BookProduct() {
     const { id } = useParams();
     const [productDetails, setProductDetails] = useState(null);
