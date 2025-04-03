@@ -2,12 +2,12 @@ import React,{useEffect} from 'react'
 import { useForm } from 'react-hook-form'
 import { Button, Input } from "../index.js"
 import { useNavigate } from 'react-router'
+import service from '../../services/config.js'
 
 
 function CatagoryForm({ catagory }) {
     const { register, handleSubmit, reset } = useForm({});
 
-    console.log(catagory);
     
   
     useEffect(()=>{
@@ -31,9 +31,9 @@ function CatagoryForm({ catagory }) {
             
             let dbCatagory;
             if (catagory) {
-                dbCatagory = await services.changeCatagoryDetails(catagory._id, { ...data });
+                dbCatagory = await service.changeCatagoryDetails(catagory._id, { ...data });
             } else {
-                dbCatagory = await services.addCatagory({ ...data });
+                dbCatagory = await service.addCatagory({ ...data });
             }
 
             if (dbCatagory) {

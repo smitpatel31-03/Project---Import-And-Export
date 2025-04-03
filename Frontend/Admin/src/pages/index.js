@@ -16,6 +16,7 @@ import AddCatagory from "./AddCatagory";
 import ChangeCatagoryImage from './ChangeCatagoryImage'
 import AddProduct from "./AddProduct";
 import ChangeProductFeatureImage from './ChangeProductFeatureImage'
+import AddImagesToProduct from './AddImagesToProduct'
 
 export{
     Catagies,
@@ -35,5 +36,6 @@ export{
     AddCatagory,
     ChangeCatagoryImage,
     AddProduct,
-    ChangeProductFeatureImage
+    ChangeProductFeatureImage,
+    AddImagesToProduct
 }

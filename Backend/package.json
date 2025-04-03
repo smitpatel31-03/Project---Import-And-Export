@@ -16,6 +16,8 @@
     "dev": "node --watch -r dotenv/config src/index.js"
   },
   "dependencies": {
+    "@paypal/paypal-js": "^8.2.0",
+    "axios": "^1.8.4",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.5.1",
     "cookie-parser": "^1.4.7",

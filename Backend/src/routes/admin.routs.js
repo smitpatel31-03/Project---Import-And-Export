@@ -26,7 +26,11 @@ router.route("/addCatagory").post(
 router.route("/addProduct/:catagoryId").post(verifyJWTAdmin,upload.single("featuedImages"),addProduct)
 
 //patch Routs
-router.route("/addPhotosToProduct/:productId").patch(verifyJWTAdmin,upload.array("image",10),addPhotosToProduct)
+router.route("/addPhotosToProduct/:productId").patch(
+    (req, res, next) => {next();},
+    verifyJWTAdmin,upload.array("image",10),
+    (req, res, next) => {next();},
+    addPhotosToProduct)
 router.route("/changeCatagoryImage/:catagoryId").patch((req, res, next) => {next();},verifyJWTAdmin,upload.single("image"),(req, res, next) => {next();},changeCatagoryImage)
 router.route("/changeProductFeatureImage/:productId").patch((req, res, next) => {next();},verifyJWTAdmin,upload.single("featuedImages"),(req, res, next) => {next();},changeProductFeatureImage)
 router.route("/changeCatagoryDetails/:catagoryId").patch(verifyJWTAdmin, changeCatagoryDetails)

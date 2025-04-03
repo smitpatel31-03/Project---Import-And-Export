@@ -45,7 +45,7 @@ export class AuthServices {
         }
     }
 
-    async logoutAdmin() {
+    async logoutUser() {
         try {
             const headers =  this.getAuthHeaders()
             const response = await this.axiosInstance.post(`${this.API_URL}/logout`,{headers})

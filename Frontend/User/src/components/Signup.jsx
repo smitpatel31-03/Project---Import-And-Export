@@ -90,7 +90,7 @@ function Signup() {
 
                         <Input
                             label="Phone Number"
-                            placeholder="Enter Your Key"
+                            placeholder="Enter Your Number"
                             type="number"
                             className="bg-gray-700 text-black border border-gray-600 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
                             {...register("phoneNumber", {
@@ -98,8 +98,8 @@ function Signup() {
                             })}
                         />
                         <Input
-                            label="Phone Number"
-                            placeholder="Enter Your Key"
+                            label="Country"
+                            placeholder="Enter Your Country"
                             type="text"
                             className="bg-gray-700 text-black border border-gray-600 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
                             {...register("country", {

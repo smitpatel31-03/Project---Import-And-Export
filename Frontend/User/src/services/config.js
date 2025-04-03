@@ -15,6 +15,10 @@ export class Services  {
 
     async bookOrder(productId,{quntity, userDeliveryAddress}){
         try {
+
+            console.log("quntity 1:",quntity);
+            console.log("userDeliveryAddress 1:",userDeliveryAddress);
+            
             const headers = authServices.getAuthHeaders()
             const response = await this.axiosInstance.post(`${this.APT_URL}/bookOrder/${productId}`,{quntity, userDeliveryAddress},{headers})
 
@@ -142,6 +146,25 @@ export class Services  {
         }
     }
 
+    async capturePaypalOrder({ orderID }) {
+        try {
+            const headers = authServices.getAuthHeaders();
+            const response = await this.axiosInstance.post(
+                `http://localhost:8000/api/v1/paypal/capture-order`, 
+                { orderID }, 
+                { headers }
+            );
+
+            console.log("response :",response);
+            
+            return response.data;
+        } catch (error) {
+            throw error.response?.data?.message || "Failed to capture PayPal order";
+        }
+    }
+    
+   
+    
 
     getAuthHeaders() {
         const token = localStorage.getItem("accessToken");

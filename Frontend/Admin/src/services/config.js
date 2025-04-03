@@ -116,20 +116,25 @@ export class Service{
         }
     }
 
-    async addImagesToProduct(productId,{image}){
+    async addImagesToProduct(productId, formData) {
         try {
             const headers = {
                 ...authServices.getAuthHeadersImage(),
                 "Content-Type": "multipart/form-data",
             };
-              
-            const response = await this.axiosInstance.patch(`${this.API_URL}/addPhotosToProduct/${productId}`,{image},{headers})
-
-            return response.data
+    
+            const response = await this.axiosInstance.patch(
+                `${this.API_URL}/addPhotosToProduct/${productId}`,
+                formData, 
+                { headers }
+            );
+    
+            return response.data;
         } catch (error) {
-            throw error.response?.data?.message || "Something Went Wrong Whilr Adding Images"
+            throw error.response?.data?.message || "Something went wrong while adding images";
         }
     }
+    
 
     async updateOrderDetails(orderId,{status,statusLocation}){
         try {

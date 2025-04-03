@@ -19,6 +19,9 @@ function OrderDetails() {
         fetchOrderDetails();
     }, [id]);
 
+    console.log("order :",order);
+    
+
     if (!order) {
         return <h1 className="text-center text-white mt-10">No Order Found</h1>;
     }
@@ -29,15 +32,15 @@ function OrderDetails() {
             <div className="grid md:grid-cols-2 gap-6 bg-gray-800 p-6 rounded-lg shadow-lg">
                 <div className="flex justify-center">
                     <img 
-                        src={order.CurruntOrder.product.featuedImages} 
-                        alt={order.CurruntOrder.product.name} 
+                        src={order?.CurruntOrder?.product?.featuedImages} 
+                        alt={order?.CurruntOrder?.product?.name} 
                         className="w-80 h-52 object-cover rounded-lg shadow-md"
                     />
                 </div>
                 <div className="text-white">
-                    <h1 className="text-2xl font-bold">{order.CurruntOrder.product.name}</h1>
-                    <p className="text-gray-400 mt-2">Product ID: {order.CurruntOrder.product.productId}</p>
-                    <p className="text-gray-400">Category: {order.CurruntOrder.product.catagories.name}</p>
+                    <h1 className="text-2xl font-bold">{order?.CurruntOrder?.product?.name}</h1>
+                    <p className="text-gray-400 mt-2">Product ID: {order?.CurruntOrder?.product?.productId}</p>
+                    <p className="text-gray-400">Category: {order?.CurruntOrder?.product?.catagories?.name}</p>
                 </div>
             </div>
 
@@ -45,8 +48,8 @@ function OrderDetails() {
                 
                  <div className="text-white">
                  <h2 className="text-xl font-semibold">Order Details</h2>
-                 <p className="text-gray-400 mt-2">Status: {order.status}</p>
-                 <p className="text-gray-400">Location: {order.statusLocation}</p>
+                 <p className="text-gray-400 mt-2">Status: {order?.status}</p>
+                 <p className="text-gray-400">Location: {order?.statusLocation}</p>
                  
              </div>
                
@@ -54,18 +57,18 @@ function OrderDetails() {
                     
                     <div className="text-white">
                         <h2 className="text-xl font-semibold">User Details</h2>
-                        <p className="text-gray-400 mt-2">{order.CurruntOrder.user.fullName}</p>
-                        <p className="text-gray-400">{order.CurruntOrder.user.email}</p>
-                        <p className="text-gray-400">{order.CurruntOrder.user.country}</p>
+                        <p className="text-gray-400 mt-2">{order?.CurruntOrder?.user?.fullName}</p>
+                        <p className="text-gray-400">{order?.CurruntOrder?.user?.email}</p>
+                        <p className="text-gray-400">{order?.CurruntOrder?.user?.country}</p>
                     </div>
                 
 
                     <div className="mt-4 text-white">
                         <h2 className="text-xl font-semibold">Delivery Address</h2>
-                        <p className="text-gray-400 mt-2">{order.CurruntOrder.delivryaddress.addressLine1}</p>
-                        <p className="text-gray-400">{order.CurruntOrder.delivryaddress.addressLine2}</p>
-                        <p className="text-gray-400">{order.CurruntOrder.delivryaddress.city}, {order.CurruntOrder.delivryaddress.state}</p>
-                        <p className="text-gray-400">{order.CurruntOrder.delivryaddress.postalCode}, {order.CurruntOrder.delivryaddress.country}</p>
+                        <p className="text-gray-400 mt-2">{order?.CurruntOrder?.delivryaddress?.addressLine1}</p>
+                        <p className="text-gray-400">{order?.CurruntOrder?.delivryaddress?.addressLine2}</p>
+                        <p className="text-gray-400">{order?.CurruntOrder?.delivryaddress?.city}, {order?.CurruntOrder?.delivryaddress?.state}</p>
+                        <p className="text-gray-400">{order?.CurruntOrder?.delivryaddress?.postalCode}, {order?.CurruntOrder?.delivryaddress?.country}</p>
                     </div>
                 </div>
             </div>

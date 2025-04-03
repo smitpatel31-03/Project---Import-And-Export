@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Logo, LogoutButton } from '../index.js';
+import { Logo, LogoutButton,CurruncySelect } from '../index.js';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { FiSearch, FiMenu } from 'react-icons/fi';
+import { useNavigate } from 'react-router';
+import { FiMenu } from 'react-icons/fi';
 
 function Header() {
   const authStatus = useSelector((state) => state.auth.status);
@@ -41,8 +41,9 @@ function Header() {
               </div>
             )
           ))}
+          <CurruncySelect />
           {/* Logout Button */}
-          {authStatus && <LogoutButton />}
+          {authStatus && <LogoutButton /> }
         </nav>
 
         {/* Mobile Menu Button */}

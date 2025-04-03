@@ -10,7 +10,7 @@ function OrderCard({ order }) {
     }
 
     return (
-      <div className="bg-gradient-to-br from-blue-500 to-blue-700 shadow-xl rounded-2xl p-5 w-full max-w-sm text-white">
+      <div className="bg-gradient-to-br from-zinc-500 to-gray-700 shadow-xl rounded-xl p-5 w-full max-w-sm text-white">
       {/* Product Name */}
       <h3 className="text-xl font-semibold mb-3">{order?.product?.name || "Product Name"}</h3>
 

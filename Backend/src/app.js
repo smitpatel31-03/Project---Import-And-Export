@@ -27,9 +27,11 @@ app.use(cookieParser())
 //routes
 import userRouter from "./routes/user.routs.js"
 import adminRouter from "./routes/admin.routs.js"
+import paypalRouter from './routes/paypal.routes.js'
 
 //routes declaration
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/admin", adminRouter)
+app.use("/api/v1/paypal", paypalRouter)
 
 export { app }

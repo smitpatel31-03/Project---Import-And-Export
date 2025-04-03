@@ -5,7 +5,7 @@ import App from './App.jsx'
 import { Provider } from 'react-redux'
 import store from './store/store.js'
 import { createBrowserRouter,RouterProvider } from 'react-router'
-import {Catagies,Dashboard,Login,Order,Products,Signup,CatagoriesDetails,ProductDetails, OrderDetails, Admin,UpdateOrderDetails, AddCatagory,ChangeCatagoryDetail,ChangeCatagoryImage,AddProduct,ChangeProductDetail,ChangeProductFeatureImage} from './pages/index.js'
+import {Catagies,Dashboard,Login,Order,Products,Signup,CatagoriesDetails,ProductDetails, OrderDetails, Admin,UpdateOrderDetails, AddCatagory,ChangeCatagoryDetail,ChangeCatagoryImage,AddProduct,ChangeProductDetail,ChangeProductFeatureImage,AddImagesToProduct} from './pages/index.js'
 import { AuthLayout } from './components/index.js'
 
 const router = createBrowserRouter([
@@ -146,6 +146,14 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout authentication={true}>
             <ChangeProductFeatureImage />
+          </AuthLayout>
+        )
+      },
+      {
+        path:"/addImagesToProduct/:id",
+        element: (
+          <AuthLayout authentication={true}>
+            <AddImagesToProduct />
           </AuthLayout>
         )
       },

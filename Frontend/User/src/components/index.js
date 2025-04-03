@@ -19,6 +19,7 @@ import PasswordForm from "./PasswordForm/PasswordForm";
 import ChangeAdminDetails from "./changeAdminDetails/ChangeAdminDetails";
 import AddressCardRadio from "./AddressRadio";
 import CurruntOrderCard from './CurruntOrderCard'
+import CurruncySelect from './Header/CurruncySelect'
 
 
 export{
@@ -42,5 +43,6 @@ export{
     PasswordForm,
     ChangeAdminDetails,
     AddressCardRadio,
-    CurruntOrderCard
+    CurruntOrderCard,
+    CurruncySelect
 }

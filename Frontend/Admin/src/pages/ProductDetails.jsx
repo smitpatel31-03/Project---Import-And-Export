@@ -8,7 +8,6 @@ function ProductDetails() {
     const { id } = useParams();
     const [productDetails, setProductDetails] = useState(null);
     const [featuredImage, setFeaturedImage] = useState("");
-    const [showComponent, setShowComponent] = useState()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -28,9 +27,7 @@ function ProductDetails() {
         fetchProductData();
     }, [id]);
 
-    const handleShowComponent = (type) => {
-        setShowComponent(type)
-    }
+  
 
     
 
@@ -88,17 +85,9 @@ function ProductDetails() {
                 <div className='mt-6 flex gap-4'>
                     <Button className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-lg" onClick={()=>navigate(`/changeProductDetails/${id}`)}>Update Product Details</Button>
                     <Button className="bg-green-600 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded-lg" onClick={()=>navigate(`/ChangeProductFeatureImage/${id}`)}>Change Featured Image</Button>
-                    <Button className="bg-yellow-500 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-lg" onClick={()=>handleShowComponent('photos')}>Add Photos</Button>
+                    <Button className="bg-yellow-500 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-lg" onClick={()=>navigate(`/addImagesToProduct/${id}`)}>Add Photos</Button>
                 </div>
 
-                {showComponent && (
-                    <ChangeProductDetail
-                        product={productDetails}
-                        initialDetail={showComponent === "details"}
-                        initialImage={showComponent === "image"}
-                        initialPhotos={showComponent === "photos"}
-                    />
-                )}
             </div>
         );
   

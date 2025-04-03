@@ -499,15 +499,19 @@ const addPhotosToProduct = asyncHandler(async (req, res) => {
 
     let imageUrls = [];
 
+    console.log(req.files);
+    
+
     for (const file of req.files) {
-        const image = await uploadOnCloudnary(file.path);
+        const image = await uploadOnCloudnary(file);
         
+        console.log("image :",image);
+        
+
         if (image) {
             imageUrls.push(image);
         }
     }
-
-    
 
     if (imageUrls.length === 0) {
         throw new ApiError(401, "Image upload failed.");
@@ -1186,11 +1190,7 @@ const getOrderDetails = asyncHandler(async(req, res)=>{
                             },
                             product: {
                                 $first: "$product"
-                            },
-                            delivryaddress: {
-                                $first: "$delivryaddress"
-                            },
-
+                            }
                         }
                     },
                     {

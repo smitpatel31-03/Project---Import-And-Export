@@ -9,6 +9,7 @@ import { Product } from "../models/product.models.js"
 import { Category } from "../models/catagory.model.js"
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose"
+import { loadScript } from "@paypal/paypal-js";
 
 const generateAccessAndRefreshToken = async (userId) => {
     try {
@@ -428,8 +429,6 @@ const changeUserDetails = asyncHandler(async (req, res) => {
 const bookOrder = asyncHandler(async (req, res) => {
     const { quntity, userDeliveryAddress } = req.body
     const { productId } = req.params
-
-    console.log("userDeliveryAddress :",userDeliveryAddress);
     
     const user = await User.findById(req.user?._id)
 
@@ -703,6 +702,10 @@ const getUserOrderDetails = asyncHandler(async (req, res) => {
 })
 
 const getCurruntOrder = asyncHandler(async (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const userCurruntOrder = await CurruntOrder.aggregate([
         {
             $lookup: {
@@ -711,6 +714,9 @@ const getCurruntOrder = asyncHandler(async (req, res) => {
                 foreignField: "_id",
                 as: "orderDetails",
                 pipeline: [
+                    {
+                        $match: { user: new mongoose.Types.ObjectId(req.user._id) } // ✅ Filter orders by userId
+                    },
                     {
                         $lookup: {
                             from: "products",
@@ -736,7 +742,7 @@ const getCurruntOrder = asyncHandler(async (req, res) => {
                                         productId: 1,
                                         price: 1,
                                         featuedImages: 1,
-                                        description:1
+                                        description: 1
                                     }
                                 }
                             ]
@@ -764,21 +770,6 @@ const getCurruntOrder = asyncHandler(async (req, res) => {
                         }
                     },
                     {
-                        $lookup: {
-                            from: "users",
-                            localField: "user",
-                            foreignField: "_id",
-                            as: "user",
-                            pipeline: [
-                                {
-                                    $match: {
-                                        _id: new mongoose.Types.ObjectId(req.user?._id)
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    {
                         $addFields: {
                             productDetails: { $first: "$productDetails" },
                             deliveryAddress: { $first: "$deliveryAddress" }
@@ -793,17 +784,21 @@ const getCurruntOrder = asyncHandler(async (req, res) => {
                 ]
             }
         },
+        {
+            $match: {
+                orderDetails: { $ne: [] } // ✅ Ensure only orders belonging to the user are returned
+            }
+        },
         { $addFields: { orderDetails: { $first: "$orderDetails" } } },
         {
             $project: {
-                _id:1,
+                _id: 1,
                 orderDetails: 1,
                 status: 1,
                 statusLocation: 1
             }
         }
     ]);
-    
 
     res.status(200).json(new ApiResponse(200, userCurruntOrder, "Current Order"));
 });
@@ -939,13 +934,6 @@ const catagoryDetailsOrListOfCatagorysProduct = asyncHandler(async (req, res) =>
                         }
                     }
                 ]
-            }
-        },
-        {
-            $addFields: {
-                products: {
-                    $first: "$products"
-                }
             }
         },
         {
@@ -1156,6 +1144,24 @@ const findUserAddress = asyncHandler(async (req, res) => {
     ))
 })
 
+const paypalPayment = asyncHandler(async (req,res) => {
+    let paypal;
+
+try {
+    paypal = await loadScript({ clientId: "test" });
+} catch (error) {
+    console.error("failed to load the PayPal JS SDK script", error);
+}
+
+if (paypal) {
+    try {
+        await paypal.Buttons().render("#your-container-element");
+    } catch (error) {
+        console.error("failed to render the PayPal Buttons", error);
+    }
+}
+})
+
 export {
     registerUser,
     loginUser,
@@ -1179,5 +1185,6 @@ export {
     getAllProducts,
     findUserAddress,
     getUserOrderDetails,
-    getCurruntOrderDetails
+    getCurruntOrderDetails,
+    paypalPayment
 }
