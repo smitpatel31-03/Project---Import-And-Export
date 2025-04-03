@@ -2,7 +2,6 @@ import React from 'react';
 
 function OrderCard({ order }) {
 
-  console.log('order :',order);
     
   
     if (!order || !order?.product) {

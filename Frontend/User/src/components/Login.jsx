@@ -26,7 +26,6 @@ function Login() {
           navigate('/');
         }
 
-        console.log(adminData);
         
       }
     } catch (error) {

@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom'
 function Catagories() {
     const [catagory,setCatagory] = useState([])
 
-    console.log(catagory);
     
     useEffect(()=>{
         const fetchCatagory = async() => {

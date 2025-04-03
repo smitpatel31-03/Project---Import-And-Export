@@ -441,7 +441,7 @@ const bookOrder = asyncHandler(async (req, res) => {
     })
 
     const addToCurruntOrder = await CurruntOrder.create({
-        curruntOrder: order,
+        curruntOrder: new mongoose.Types.ObjectId(order?._id),
         status: "PENDING"
     })
 
@@ -867,7 +867,7 @@ const getCurruntOrderDetails = asyncHandler(async (req, res) => {
                         },
                         userDeliveryAddress: {
                             $first: "$userDeliveryAddress"
-                        },
+                        }
                     }
                 },
                 {
@@ -895,6 +895,9 @@ const getCurruntOrderDetails = asyncHandler(async (req, res) => {
             }
         }
     ])
+
+    console.log("userCurruntOrderDetails :",userCurruntOrderDetails);
+    
 
     res
     .status(200)

@@ -7,8 +7,6 @@ function useCurrencyInfo(){
         .then((res)=> res.json())
         .then((res) => setdata(res["conversion_rates"]))
     },[])
-
-    console.log("data Curruncy :",data);
     
     return data
     

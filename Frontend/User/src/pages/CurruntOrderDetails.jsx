@@ -28,7 +28,6 @@ function CurruntOrderDetails() {
         return <h1 className="text-center text-red-500 text-xl font-bold mt-10">Currunt Order Details Not Found</h1>;
     }
 
-    console.log("curruntOrderDetails :", curruntOrderDetails);
 
     const currentStatusIndex = orderStatuses.indexOf(curruntOrderDetails?.status);
 

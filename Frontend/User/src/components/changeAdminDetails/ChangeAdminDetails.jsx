@@ -21,11 +21,9 @@ function ChangeAdminDetails() {
       try {
         const data = await authServices.getUserDetails();
         if (data) {
-          console.log("Fetched User Data:", data);
           setUserData(data);
           reset(data); // Pre-fill form fields with user data
         } else {
-          console.log("No user data found.");
         }
       } catch (err) {
         console.error("Failed to fetch user data:", err);
@@ -38,7 +36,6 @@ function ChangeAdminDetails() {
   // Handle form submission
   const submit = async (formData) => {
     try {
-      console.log("Updated Data:", formData); // Check updated data in console
       const response = await authServices.changeUserDetails(formData);
       if (response) navigate("/user");
     } catch (error) {

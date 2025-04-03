@@ -7,8 +7,6 @@ function OrderDetails() {
 
   const {id} = useParams()
 
-  console.log(id);
-  
   useEffect(()=>{
     const fetchOrderDetils = async() => {
       const data = await services.getUserOrderDetails(id)  
@@ -20,8 +18,10 @@ function OrderDetails() {
     fetchOrderDetils()
   },[id])
 
-
-  console.log(orderDetails);
+  console.log("working");
+  
+  console.log("orderDetails :",orderDetails?.userDeliveryAddress);
+  
   
   return (
     <div className="p-8 bg-gradient-to-br from-[#e3f2fd] to-[#bbdefb] min-h-screen flex flex-col items-center justify-center">

@@ -2,7 +2,6 @@ import React from 'react';
 
 function CategoryCard({ catagory }) {
 
-    console.log(catagory);
     
   return (
     <div className="bg-white shadow-lg rounded-lg overflow-hidden w-80">

@@ -21,8 +21,6 @@ function UserAddress() {
         fetchAddressDetails()
     },[id])
     
-    console.log('address :',address);
-    
     
   return (
     <div>

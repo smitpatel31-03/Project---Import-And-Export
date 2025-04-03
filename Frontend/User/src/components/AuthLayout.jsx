@@ -8,7 +8,6 @@ function Protected({children,authentication=true}) {
     const authstatus = useSelector(state => state.auth.status)
     
     useEffect(()=>{
-        console.log('authstatus :',authstatus);
         
         authstatus
         if(authentication && authstatus!==authentication){

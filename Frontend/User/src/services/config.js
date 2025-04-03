@@ -16,13 +16,12 @@ export class Services  {
     async bookOrder(productId,{quntity, userDeliveryAddress}){
         try {
 
-            console.log("quntity 1:",quntity);
-            console.log("userDeliveryAddress 1:",userDeliveryAddress);
+            console.log("userDeliveryAddress :",userDeliveryAddress);
+            
             
             const headers = authServices.getAuthHeaders()
             const response = await this.axiosInstance.post(`${this.APT_URL}/bookOrder/${productId}`,{quntity, userDeliveryAddress},{headers})
 
-            console.log(response.data);
 
             return response.data
             
@@ -88,8 +87,6 @@ export class Services  {
     async getAllCatagory(){
         try {
 
-            console.log('working');
-            
             const headers = authServices.getAuthHeaders()
             const response = await this.axiosInstance.get(`${this.APT_URL}/getAllCatagories`,{headers})
 
@@ -106,7 +103,6 @@ export class Services  {
             const headers = authServices.getAuthHeaders()
             const response = await this.axiosInstance.get(`${this.APT_URL}/catagoryDetailsOrListOfCatagorysProduct/${catagoryId}`,{headers})
 
-            console.log(response.data.data);
 
             return response.data.data
             
@@ -132,10 +128,7 @@ export class Services  {
     async getAllProduct(){
         try {
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.APT_URL}/getAllProducts/`,{headers})
-
-            console.log('response :',response.data.data);
-            
+            const response = await this.axiosInstance.get(`${this.APT_URL}/getAllProducts/`,{headers})            
 
             return response.data.data
         
@@ -154,8 +147,6 @@ export class Services  {
                 { orderID }, 
                 { headers }
             );
-
-            console.log("response :",response);
             
             return response.data;
         } catch (error) {
@@ -168,7 +159,6 @@ export class Services  {
 
     getAuthHeaders() {
         const token = localStorage.getItem("accessToken");
-        console.log(token);
         
         return token ? { Authorization: `Bearer ${token}` } : {};
     }

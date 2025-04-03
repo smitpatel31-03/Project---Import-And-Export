@@ -1,7 +1,6 @@
 import React from 'react';
 
 function CurruntOrderCard({ order }) {
-  console.log('order:', order);
 
   // Status colors
   const statusColors = {

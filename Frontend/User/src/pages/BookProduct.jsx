@@ -8,7 +8,6 @@ import authServices from "../services/auth.js";
 import { loadScript } from "@paypal/paypal-js";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import conf from "../conf/conf.js";
-import services from '../services/config.js'
 
 function BookProduct() {
     const { id } = useParams();
@@ -19,7 +18,7 @@ function BookProduct() {
     const navigate = useNavigate();
     const [paypalLoaded, setPaypalLoaded] = useState(false);
 
-    console.log("services :",services);
+    
     
 
     useEffect(() => {
@@ -34,7 +33,6 @@ function BookProduct() {
         fetchProductData();
     }, [id]);
 
-    console.log("productDetails :", productDetails);
 
 
     useEffect(() => {
@@ -72,10 +70,10 @@ function BookProduct() {
         }
     };
 
+    console.log("address :",address)
     const createOrder = async () => {
         try {
             const response = await Services.createPaypalOrder({ amount: productDetails.price });
-            console.log("🆕 New PayPal Order ID:", response.orderID);
             return response.orderID;
         } catch (error) {
             console.error("❌ Error creating PayPal order:", error);
@@ -94,12 +92,10 @@ function BookProduct() {
         capturedOrders.add(orderID); // Mark order as captured
     
         try {
-            console.log("📡 Sending request to capture PayPal order:", orderID);
     
             const response = await Services.capturePaypalOrder({ orderID });
     
             if (response?.status === "COMPLETED") {
-                console.log("✅ Order Captured Successfully", response);
                 await bookOrder(formData);  // Ensure booking happens only after successful capture
             } else {
                 console.error("❌ Order capture failed. Unexpected status:", response);
@@ -200,25 +196,22 @@ function BookProduct() {
                                         }}
                                         onApprove={async (data, actions) => {
                                             try {
+
                                                 const details = await actions.order.capture();
-                                                console.log("✅ Transaction details:", details);
                                         
                                                 alert("Transaction completed by " + details.payer.name.given_name);
                                         
                                                 const orderID = details.id;
-                                                const formData = { quntity, address: watch("userDeliveryAddress") };
+                                                const formData = { quntity, userDeliveryAddress: watch("userDeliveryAddress") };
                                         
-                                                console.log("📡 Capturing order with orderID:", orderID, "and formData:", formData);
-                                        
+                                              
                                                 if (details.status === "COMPLETED") {
-                                                    console.log("✅ Order already captured. Booking order...");
                                                     await bookOrder(formData);  // ✅ Place the order in your system
                                                     return;
                                                 }
                                         
                                                 await captureOrder(orderID, formData); // Capture order if not already completed
                                         
-                                                console.log("✅ Order captured successfully!");
                                                 
                                             } catch (error) {
                                                 console.error("❌ Error capturing PayPal order:", error);

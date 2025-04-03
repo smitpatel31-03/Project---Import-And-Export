@@ -29,7 +29,6 @@ function Order() {
         fetchOrder();
     }, []);
 
-    console.log("order :",order);
 
     
     
@@ -43,9 +42,9 @@ function Order() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {order?.length > 0 ? (
-                        order?.map((item, index) => (
+                        order?.map((item) => (
                             <Link to={`/curruntOrderDetails/${item._id}`}>
-                                <CurruntOrderCard key={index} order={item} />
+                                <CurruntOrderCard order={item} />
                             </Link>
                         ))
                     ) : (

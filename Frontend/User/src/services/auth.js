@@ -67,7 +67,6 @@ export class AuthServices {
          const headers = this.getAuthHeaders()
          const response = await this.axiosInstance.get(`${this.API_URL}/getCurruntUser`,{headers})
  
-         console.log(response.data.data);
  
          return response.data.data
        } catch (error) {
@@ -81,7 +80,6 @@ export class AuthServices {
          const headers = this.getAuthHeaders()
          const response = await this.axiosInstance.get(`${this.API_URL}/getUserDetails`,{headers})
  
-         console.log("response :",response);
          
       
          return response.data.data
@@ -96,7 +94,6 @@ export class AuthServices {
          const headers = this.getAuthHeaders()
          const response = await this.axiosInstance.patch(`${this.API_URL}/changeUsersCurruntPassword`,{ oldPassword, newPassword, conformNewPassword},{headers})
  
-         console.log(response);
  
          return response.data
        } catch (error) {
@@ -110,7 +107,6 @@ export class AuthServices {
          const headers = this.getAuthHeaders()
          const response = await this.axiosInstance.patch(`${this.API_URL}/changeUserDetails`,{ email, phoneNumber, fullName, country},{headers})
  
-         console.log(response);
  
          return response.data
        } catch (error) {
@@ -124,7 +120,6 @@ export class AuthServices {
          const headers = this.getAuthHeaders()
          const response = await this.axiosInstance.post(`${this.API_URL}/addAddress`, { name, addressLine1, addressLine2, city, postalCode, state, country, mobileNumber },{headers})
  
-         console.log(response);
  
          return response.data
        } catch (error) {
@@ -138,7 +133,6 @@ export class AuthServices {
          const headers = this.getAuthHeaders()
          const response = await this.axiosInstance.patch(`${this.API_URL}/updateUserAddress/${useraddressId}`, { name, addressLine1, addressLine2, city, postalCode, state, country, mobileNumber },{headers})
  
-         console.log(response);
  
          return response.data
        } catch (error) {

@@ -185,8 +185,6 @@ const logoutAdmin = asyncHandler(async (req, res) => {
 
     //find admin
     //remove refresh token from database
-
-    console.log("req.admin._id :",req.admin._id);
     
     await Admin.findByIdAndUpdate(
         req.admin._id,
@@ -498,14 +496,11 @@ const addPhotosToProduct = asyncHandler(async (req, res) => {
     }
 
     let imageUrls = [];
-
-    console.log(req.files);
     
 
     for (const file of req.files) {
         const image = await uploadOnCloudnary(file);
         
-        console.log("image :",image);
         
 
         if (image) {
@@ -658,12 +653,10 @@ const changeCatagoryDetails = asyncHandler(async (req, res) => {
 const changeCatagoryImage = asyncHandler(async (req, res) => {
     const { catagoryId } = req.params
 
-    console.log(req.file);
     
 
     const imageLocalPath = req.file
 
-    console.log('imageLocalPath :',imageLocalPath);
     
 
     const image = await uploadOnCloudnary(imageLocalPath)

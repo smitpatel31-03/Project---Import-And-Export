@@ -9,7 +9,6 @@ const curruncySlice = createSlice({
     initialState,
     reducers:{
         convert:(state,action)=>{
-            console.log("action.payload :",action.payload);
             state.convertedValue = action.payload
         }
     }

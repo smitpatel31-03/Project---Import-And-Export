@@ -13,7 +13,6 @@ function CatagoryDetail() {
             const data = await service.getCatagoryDetails(id);
             if (data) {
                 setCategory(data);
-                console.log('data :', data);
                 setProducts(data.products || []);
             }
         };
@@ -24,8 +23,6 @@ function CatagoryDetail() {
         return <div className="text-center text-white text-2xl">No Category Found</div>;
     }
 
-    console.log('category :', category);
-    console.log('product :', products);
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-zinc-700  to-gray-900 p-8">

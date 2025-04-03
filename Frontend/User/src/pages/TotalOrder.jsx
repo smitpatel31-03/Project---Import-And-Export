@@ -28,7 +28,6 @@ function TotalOrder() {
         fetchOrder();
     }, []);
 
-    console.log(order);
 
     
     
