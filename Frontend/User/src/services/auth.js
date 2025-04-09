@@ -4,7 +4,7 @@ import conf from '../conf/conf.js'
 export class AuthServices {
     constructor() {
         this.axiosInstance = axios.create({
-            baseURL: conf.apiurl ,
+            baseURL: conf.apiurl || "http://localhost:10000/api/v1/users",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -30,8 +30,6 @@ export class AuthServices {
     }
 
     async loginUser({email, password }) {
-      console.log("API URL:", conf.apiurl);
-      console.log("PayPal ID:", conf.paypalClientId);
         try {
           const response = await this.axiosInstance.post("/login", { email, password });
             const {accessToken, refreshToken} = response.data.data

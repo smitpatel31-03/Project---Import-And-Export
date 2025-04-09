@@ -5,7 +5,7 @@ import conf from "../conf/conf";
 export class Services  {
     constructor(){
         this.axiosInstance = axios.create({
-            baseURL: conf.apiurl || "http://localhost:8000/api/v1/users",
+            baseURL: conf.apiurl || "http://localhost:10000/api/v1/users",
             headers:{
                  "Content-Type": "application/json"
             }
@@ -142,7 +142,7 @@ export class Services  {
         try {
             const headers = authServices.getAuthHeaders();
             const response = await this.axiosInstance.post(
-                `http://localhost:8000/api/v1/paypal/capture-order`, 
+                `https://project-import-and-export.onrender.com/api/v1/paypal/capture-order`, 
                 { orderID }, 
                 { headers }
             );
