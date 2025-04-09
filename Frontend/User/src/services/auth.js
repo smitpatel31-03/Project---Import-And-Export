@@ -30,6 +30,8 @@ export class AuthServices {
     }
 
     async loginUser({email, password }) {
+      console.log("API URL:", conf.apiurl);
+      console.log("PayPal ID:", conf.paypalClientId);
         try {
           const response = await this.axiosInstance.post("/login", { email, password });
             const {accessToken, refreshToken} = response.data.data
