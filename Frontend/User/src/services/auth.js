@@ -16,7 +16,7 @@ export class AuthServices {
 
     async registerUser({email, password, fullName, phoneNumber, country }) {
         try {
-            const response = await this.axiosInstance.post(`${this.API_URL}/register`,{email, password, fullName, phoneNumber, country })
+            const response = await this.axiosInstance.post(`/register`,{email, password, fullName, phoneNumber, country })
             const {accessToken, refreshToken} = response.data
     
         
@@ -65,7 +65,7 @@ export class AuthServices {
     async getCurruntUser(){
        try {
          const headers = this.getAuthHeaders()
-         const response = await this.axiosInstance.get(`${this.API_URL}/getCurruntUser`,{headers})
+         const response = await this.axiosInstance.get(`/getCurruntUser`,{headers})
  
  
          return response.data.data
@@ -78,7 +78,7 @@ export class AuthServices {
     async getUserDetails(){
        try {
          const headers = this.getAuthHeaders()
-         const response = await this.axiosInstance.get(`${this.API_URL}/getUserDetails`,{headers})
+         const response = await this.axiosInstance.get(`/getUserDetails`,{headers})
  
          
       
@@ -92,7 +92,7 @@ export class AuthServices {
     async changrUserPassword({ oldPassword, newPassword, conformNewPassword }){
        try {
          const headers = this.getAuthHeaders()
-         const response = await this.axiosInstance.patch(`${this.API_URL}/changeUsersCurruntPassword`,{ oldPassword, newPassword, conformNewPassword},{headers})
+         const response = await this.axiosInstance.patch(`/changeUsersCurruntPassword`,{ oldPassword, newPassword, conformNewPassword},{headers})
  
  
          return response.data
@@ -105,7 +105,7 @@ export class AuthServices {
     async changeUserDetails({ email,phoneNumber, fullName, country }){
        try {
          const headers = this.getAuthHeaders()
-         const response = await this.axiosInstance.patch(`${this.API_URL}/changeUserDetails`,{ email, phoneNumber, fullName, country},{headers})
+         const response = await this.axiosInstance.patch(`/changeUserDetails`,{ email, phoneNumber, fullName, country},{headers})
  
  
          return response.data
@@ -118,7 +118,7 @@ export class AuthServices {
     async addUserAddress( { name, addressLine1, addressLine2, city, postalCode, state, country, mobileNumber }){
        try {
          const headers = this.getAuthHeaders()
-         const response = await this.axiosInstance.post(`${this.API_URL}/addAddress`, { name, addressLine1, addressLine2, city, postalCode, state, country, mobileNumber },{headers})
+         const response = await this.axiosInstance.post(`/addAddress`, { name, addressLine1, addressLine2, city, postalCode, state, country, mobileNumber },{headers})
  
  
          return response.data
@@ -131,7 +131,7 @@ export class AuthServices {
     async updateUserAddress(useraddressId, { name, addressLine1, addressLine2, city, postalCode, state, country, mobileNumber }){
        try {
          const headers = this.getAuthHeaders()
-         const response = await this.axiosInstance.patch(`${this.API_URL}/updateUserAddress/${useraddressId}`, { name, addressLine1, addressLine2, city, postalCode, state, country, mobileNumber },{headers})
+         const response = await this.axiosInstance.patch(`/updateUserAddress/${useraddressId}`, { name, addressLine1, addressLine2, city, postalCode, state, country, mobileNumber },{headers})
  
  
          return response.data
@@ -145,7 +145,7 @@ export class AuthServices {
        try {
 
          const headers = this.getAuthHeaders()
-         const response = await this.axiosInstance.get(`${this.API_URL}/findUserAddress/${userId}`,{headers})
+         const response = await this.axiosInstance.get(`/findUserAddress/${userId}`,{headers})
  
  
          return response.data.data[0].address
