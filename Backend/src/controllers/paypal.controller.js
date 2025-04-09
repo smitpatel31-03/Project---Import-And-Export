@@ -57,11 +57,9 @@ const createOrder = asyncHandler(async(req,res)=>{
 
 const captureOrder = asyncHandler(async (req, res) => {
     try {
-        // ✅ Always get a fresh access token before making API requests
         const accessToken = await generateAccessToken();
         const orderID = req.body.orderID;
 
-        // ✅ Step 1: Fetch order details (check if already completed)
         const orderDetails = await axios.get(`https://api-m.paypal.com/v2/checkout/orders/${orderID}`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -72,7 +70,6 @@ const captureOrder = asyncHandler(async (req, res) => {
             return res.status(400).json({ error: "Order already captured" });
         }
 
-        // ✅ Step 2: Capture the order
         const response = await axios.post(`https://api-m.paypal.com/v2/checkout/orders/${orderID}/capture`, {}, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,

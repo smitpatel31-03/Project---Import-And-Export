@@ -510,6 +510,7 @@ const getUserDetails = asyncHandler(async (req, res) => {
     if (!getUser?.length) {
         throw new ApiError(401, "User Does Not Exist")
     }
+    
 
     res
         .status(201)
@@ -896,7 +897,6 @@ const getCurruntOrderDetails = asyncHandler(async (req, res) => {
         }
     ])
 
-    console.log("userCurruntOrderDetails :",userCurruntOrderDetails);
     
 
     res

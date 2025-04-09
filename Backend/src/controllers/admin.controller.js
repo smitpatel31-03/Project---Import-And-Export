@@ -1183,6 +1183,9 @@ const getOrderDetails = asyncHandler(async(req, res)=>{
                             },
                             product: {
                                 $first: "$product"
+                            },
+                            delivryaddress: {
+                                $first: "$delivryaddress"
                             }
                         }
                     },
@@ -1211,6 +1214,8 @@ const getOrderDetails = asyncHandler(async(req, res)=>{
             }
         }
     ])
+
+    
 
     res
     .status(200)

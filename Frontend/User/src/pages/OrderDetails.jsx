@@ -17,10 +17,6 @@ function OrderDetails() {
 
     fetchOrderDetils()
   },[id])
-
-  console.log("working");
-  
-  console.log("orderDetails :",orderDetails?.userDeliveryAddress);
   
   
   return (
