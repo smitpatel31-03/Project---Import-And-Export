@@ -32,7 +32,7 @@ export class AuthServices {
 
     async loginUser({email, password }) {
         try {
-            const response = await this.axiosInstance.post(`${this.API_URL}/login`,{email, password })
+          const response = await this.axiosInstance.post("/login", { email, password });
             const {accessToken, refreshToken} = response.data.data
                 
                 localStorage.setItem("accessToken",accessToken)
