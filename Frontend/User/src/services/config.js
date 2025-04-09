@@ -19,7 +19,7 @@ export class Services  {
             
             
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.post(`${this.APT_URL}/bookOrder/${productId}`,{quntity, userDeliveryAddress},{headers})
+            const response = await this.axiosInstance.post(`/bookOrder/${productId}`,{quntity, userDeliveryAddress},{headers})
 
 
             return response.data
@@ -34,7 +34,7 @@ export class Services  {
         try {
             const headers = this.getAuthHeaders()
             
-            const response = await this.axiosInstance.get(`${this.APT_URL}/getUserOrders`,{headers})
+            const response = await this.axiosInstance.get(`/getUserOrders`,{headers})
 
             return response.data.data
             
@@ -48,7 +48,7 @@ export class Services  {
         try {
             
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.APT_URL}/getCurruntOrder`,{headers})
+            const response = await this.axiosInstance.get(`/getCurruntOrder`,{headers})
 
 
             return response.data.data
@@ -63,7 +63,7 @@ export class Services  {
         try {
             
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.APT_URL}/getCurruntOrderDetails/${orderId}`,{headers})
+            const response = await this.axiosInstance.get(`/getCurruntOrderDetails/${orderId}`,{headers})
 
             return response.data.data[0]
         } catch (error) {
@@ -75,7 +75,7 @@ export class Services  {
         try {
             
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.APT_URL}/getUserOrderDetails/${orderId}`,{headers})
+            const response = await this.axiosInstance.get(`/getUserOrderDetails/${orderId}`,{headers})
 
             return response.data.data[0]
         } catch (error) {
@@ -87,7 +87,7 @@ export class Services  {
         try {
 
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.APT_URL}/getAllCatagories`,{headers})
+            const response = await this.axiosInstance.get(`/getAllCatagories`,{headers})
 
             return response.data.data
             
@@ -100,7 +100,7 @@ export class Services  {
     async getCatagoryDetails(catagoryId){
         try {
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.APT_URL}/catagoryDetailsOrListOfCatagorysProduct/${catagoryId}`,{headers})
+            const response = await this.axiosInstance.get(`/catagoryDetailsOrListOfCatagorysProduct/${catagoryId}`,{headers})
 
 
             return response.data.data
@@ -114,7 +114,7 @@ export class Services  {
     async getProductDetails(productId){
         try {
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.APT_URL}/getProductsDetails/${productId}`,{headers})
+            const response = await this.axiosInstance.get(`/getProductsDetails/${productId}`,{headers})
 
             return response.data.data
             
@@ -127,7 +127,7 @@ export class Services  {
     async getAllProduct(){
         try {
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.APT_URL}/getAllProducts/`,{headers})            
+            const response = await this.axiosInstance.get(`/getAllProducts/`,{headers})            
 
             return response.data.data
         
