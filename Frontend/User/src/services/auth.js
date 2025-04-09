@@ -4,7 +4,7 @@ import conf from '../conf/conf.js'
 export class AuthServices {
     constructor() {
         this.axiosInstance = axios.create({
-            baseURL: conf.apiurl || "http://localhost:8000/api/v1/users",
+            baseURL: conf.apiurl ,
             headers: {
                 "Content-Type": "application/json"
             },
