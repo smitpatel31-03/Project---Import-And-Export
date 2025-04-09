@@ -3,9 +3,8 @@ import conf from '../conf/conf.js'
 
 export class AuthServices {
     constructor() {
-        this.API_URL = conf.apiurl || "http://localhost:8000/api/v1/users";
         this.axiosInstance = axios.create({
-            baseURL: this.API_URL,
+            baseURL: conf.apiurl || "http://localhost:8000/api/v1/users",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -48,7 +47,7 @@ export class AuthServices {
     async logoutUser() {
         try {
             const headers =  this.getAuthHeaders()
-            const response = await this.axiosInstance.post(`${this.API_URL}/logout`,{headers})
+            const response = await this.axiosInstance.post(`/logout`,{headers})
             const {accessToken, refreshToken} = response.data
     
         
