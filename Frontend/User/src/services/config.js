@@ -4,9 +4,8 @@ import conf from "../conf/conf";
 
 export class Services  {
     constructor(){
-        this.APT_URL= conf.apiurl || "http://localhost:3000/api/auth"
         this.axiosInstance = axios.create({
-            baseURL: this.APT_URL,
+            baseURL: conf.apiurl || "http://localhost:8000/api/v1/users",
             headers:{
                  "Content-Type": "application/json"
             }
