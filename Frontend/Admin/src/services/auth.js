@@ -15,7 +15,7 @@ export class AuthServices {
     async registerAdmin({email, password, name, key, role}){
         try {
             
-            const response = await this.axiosInstance.post(`${this.API_URL}/register`,{email, password, name, key, role},{withCredentials:true})
+            const response = await this.axiosInstance.post(`/register`,{email, password, name, key, role},{withCredentials:true})
             const {accessToken, refreshToken} = response.data
 
     
@@ -52,7 +52,7 @@ export class AuthServices {
     async getCurruntAdmin(){
         try {
             const headers = await this.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.API_URL}/getCurruntAdmin`,{headers})
+            const response = await this.axiosInstance.get(`/getCurruntAdmin`,{headers})
             
             return response.data.data
         } catch (error) {
@@ -63,7 +63,7 @@ export class AuthServices {
     async getAdminDetails(){
         try {
             const headers = this.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.API_URL}/getAdminDetails`,{headers})
+            const response = await this.axiosInstance.get(`/getAdminDetails`,{headers})
             
             return response.data.data[0]
         } catch (error) {
@@ -77,7 +77,7 @@ export class AuthServices {
 
         const headers = this.getAuthHeaders()
                 
-         const response = await this.axiosInstance.post(`${this.API_URL}/logout`,{headers})
+         const response = await this.axiosInstance.post(`/logout`,{headers})
  
          localStorage.removeItem("accessToken",accessToken)
          localStorage.removeItem("refreshToken",refreshToken)
@@ -91,7 +91,7 @@ export class AuthServices {
     async adminRefreshAccessToken(){
         try {
             const headers = this.getAuthHeaders()
-            const response = await this.axiosInstance.post(`${this.API_URL}/refresh-token`,{headers})
+            const response = await this.axiosInstance.post(`/refresh-token`,{headers})
     
             const {accessToken, refreshToken} = response.data
     
@@ -107,7 +107,7 @@ export class AuthServices {
     async changeAdminDetails({email,name}){
         try {
             const headers = this.getAuthHeaders();
-            const response = await this.axiosInstance.patch(`${this.API_URL}/changeAdminDetails`,{email,name},{headers})
+            const response = await this.axiosInstance.patch(`/changeAdminDetails`,{email,name},{headers})
             
             const {accessToken,refreshToken} = response.data
             
@@ -124,7 +124,7 @@ export class AuthServices {
     async changeAdminRole({role, key}){
         try {
             const headers = this.getAuthHeaders();
-            const response = await this.axiosInstance.patch(`${this.API_URL}/changeAdminRole`,{role, key},{headers})
+            const response = await this.axiosInstance.patch(`/changeAdminRole`,{role, key},{headers})
 
             const {accessToken,refreshToken} = response.data
 
@@ -142,7 +142,7 @@ export class AuthServices {
         try {
             
             const headers = this.getAuthHeaders()
-            const response = await this.axiosInstance.post(`${this.API_URL}/changeAdminCurruntPassword`,{oldPassword, newPassword, conformNewPassword},{headers})
+            const response = await this.axiosInstance.post(`/changeAdminCurruntPassword`,{oldPassword, newPassword, conformNewPassword},{headers})
 
             
             const {accessToken, refreshToken} = response.data

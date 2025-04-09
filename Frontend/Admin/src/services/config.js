@@ -21,9 +21,8 @@ export class Service{
             };
             image = image[0]            
 
-            console.log('herar working');
             
-            const response = await this.axiosInstance.post(`${this.API_URL}/addCatagory`,{name, description,image}, {headers})
+            const response = await this.axiosInstance.post(`/addCatagory`,{name, description,image}, {headers})
 
             
             return response.data.data
@@ -43,10 +42,9 @@ export class Service{
 
             featuedImages = featuedImages[0]
 
-            console.log(name,featuedImages , price, description, category, stock, owner, productId);
             
 
-            const response = await this.axiosInstance.post(`${this.API_URL}/addProduct/${catagoryId}`,
+            const response = await this.axiosInstance.post(`/addProduct/${catagoryId}`,
                 {name, price, description, category, stock, owner, productId,featuedImages},
                 {headers})
             
@@ -60,7 +58,7 @@ export class Service{
     async changeCatagoryDetails(catagoryId,{name, description}){
         try {
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.patch(`${this.API_URL}/changeCatagoryDetails/${catagoryId}`,{name, description},{headers})
+            const response = await this.axiosInstance.patch(`/changeCatagoryDetails/${catagoryId}`,{name, description},{headers})
 
             return response.data.data
         } catch (error) {
@@ -72,7 +70,7 @@ export class Service{
         try {
             
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.patch(`${this.API_URL}/changeProductDetails/${productId}`,
+            const response = await this.axiosInstance.patch(`/changeProductDetails/${productId}`,
                 {name, price, description, stock, productId},
                 {headers})
             
@@ -93,7 +91,7 @@ export class Service{
             console.log(image);
             
             image = image[0]  
-            const response = await this.axiosInstance.patch(`${this.API_URL}/changeCatagoryImage/${catagoryId}`,{image},{headers})
+            const response = await this.axiosInstance.patch(`/changeCatagoryImage/${catagoryId}`,{image},{headers})
 
             return response.data.data
         } catch (error) {
@@ -108,7 +106,7 @@ export class Service{
                 "Content-Type": "multipart/form-data",
             };
             featuedImages = featuedImages[0]  
-            const response = await this.axiosInstance.patch(`${this.API_URL}/changeProductFeatureImage/${productId}`,{featuedImages},{headers})
+            const response = await this.axiosInstance.patch(`/changeProductFeatureImage/${productId}`,{featuedImages},{headers})
 
             return response.data
         } catch (error) {
@@ -124,7 +122,7 @@ export class Service{
             };
     
             const response = await this.axiosInstance.patch(
-                `${this.API_URL}/addPhotosToProduct/${productId}`,
+                `/addPhotosToProduct/${productId}`,
                 formData, 
                 { headers }
             );
@@ -140,7 +138,7 @@ export class Service{
         try {
             
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.patch(`${this.API_URL}/updateOrderDetails/${orderId}`,{status,statusLocation},{headers})
+            const response = await this.axiosInstance.patch(`/updateOrderDetails/${orderId}`,{status,statusLocation},{headers})
             
             
             return response.data.data
@@ -152,7 +150,7 @@ export class Service{
     async getCurruntOrders(){
         try {
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.API_URL}/getCurruntOrders`,{headers})
+            const response = await this.axiosInstance.get(`/getCurruntOrders`,{headers})
 
             return response.data.data
         } catch (error) {
@@ -164,7 +162,7 @@ export class Service{
         
         try {
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.API_URL}/catagoryDetailsOrListOfCatagorysProduct/${catagoryId}`,{headers})
+            const response = await this.axiosInstance.get(`/catagoryDetailsOrListOfCatagorysProduct/${catagoryId}`,{headers})
 
             return response.data.data
         } catch (error) {
@@ -175,7 +173,7 @@ export class Service{
     async getAllProducts(){
         try {
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.API_URL}/getAllProducts`,{headers})
+            const response = await this.axiosInstance.get(`/getAllProducts`,{headers})
             
             return response.data
         } catch (error) {
@@ -189,7 +187,7 @@ export class Service{
             
 
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.API_URL}/getAllCatagories`,{headers})            
+            const response = await this.axiosInstance.get(`/getAllCatagories`,{headers})            
 
             return response.data.data
         } catch (error) {
@@ -201,7 +199,7 @@ export class Service{
         try {
             
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.API_URL}/getProductsDetails/${productId}`,{headers})
+            const response = await this.axiosInstance.get(`/getProductsDetails/${productId}`,{headers})
 
             return response.data.data
         } catch (error) {
@@ -212,7 +210,7 @@ export class Service{
     async getAdminDetails(){
         try {
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.API_URL}/getAdminDetails`,{headers})
+            const response = await this.axiosInstance.get(`/getAdminDetails`,{headers})
 
             return response.data.data
         } catch (error) {
@@ -224,7 +222,7 @@ export class Service{
     async getOrderDetails(orderId){
         try {
             const headers = authServices.getAuthHeaders()
-            const response = await this.axiosInstance.get(`${this.API_URL}/getOrderDetails/${orderId}`,{headers})
+            const response = await this.axiosInstance.get(`/getOrderDetails/${orderId}`,{headers})
     
             return response.data.data
     
