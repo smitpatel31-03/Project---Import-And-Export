@@ -4,13 +4,13 @@ import axios from "axios";
 
 export class Service{
     constructor() {
-        this.API_URL = conf.apiurl || "http://localhost:3000/api/auth";
         this.axiosInstance = axios.create({
-            baseURL: this.API_URL,
+            baseURL: conf.apiurl || "http://localhost:10000/api/v1/admin",
             headers: {
                 "Content-Type": "application/json"
-            }
-        });  
+            },
+            withCredentials: true
+        })
     }
 
     async addCatagory({name, description,image}){

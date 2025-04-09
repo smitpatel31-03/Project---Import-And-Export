@@ -3,14 +3,13 @@ import axios from "axios";
 
 export class AuthServices {
     constructor() {
-        this.API_URL = conf.apiurl || "http://localhost:8000/api/v1/admin";
         this.axiosInstance = axios.create({
-            baseURL: this.API_URL,
+            baseURL: conf.apiurl || "http://localhost:10000/api/v1/admin",
             headers: {
                 "Content-Type": "application/json"
             },
             withCredentials: true
-        });
+        })
     }
 
     async registerAdmin({email, password, name, key, role}){
