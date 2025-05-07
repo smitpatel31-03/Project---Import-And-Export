@@ -54,7 +54,7 @@ function Login() {
           {/* Login Form */}
           <form onSubmit={handleSubmit(login)} className="mt-6">
             <div className="space-y-5">
-              <Input
+              <input
                 label="Email:"
                 placeholder="Enter Your Email:"
                 className="w-full bg-gray-600 text-black border border-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -68,7 +68,7 @@ function Login() {
                 })}
               />
   
-              <Input
+              <input
                 label="Password:"
                 placeholder="Enter Your Password"
                 type="password"

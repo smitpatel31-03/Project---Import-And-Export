@@ -25,7 +25,7 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-3">Company</h3>
             <ul className="space-y-2 text-gray-400">
               <li className="hover:text-blue-400 cursor-pointer">➜ About</li>
-              <li className="hover:text-blue-400 cursor-pointer">➜ Term Of Services</li>
+              <li className="hover:text-blue-400 cursor-pointer">➜ Term of Services</li>
               <li className="hover:text-blue-400 cursor-pointer">➜ Privacy Policy</li>
               <li className="hover:text-blue-400 cursor-pointer">➜ Licensed & Regulation</li>
             </ul>
