@@ -50,7 +50,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center mt-6 text-gray-400 text-sm">
           <p>© 2024 All Rights Reserved.</p>
           <div className="flex space-x-4">
-            <p className="hover:text-blue-400 cursor-pointer">Term Of Service</p>
+            <p className="hover:text-blue-400 cursor-pointer">Term of Service</p>
             <p className="hover:text-blue-400 cursor-pointer">Policy Service</p>
           </div>
         </div>
