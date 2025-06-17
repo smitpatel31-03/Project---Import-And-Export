@@ -37,6 +37,7 @@ export class AuthServices {
                 { email, password },
                 { withCredentials: true }
               );
+              
 
             const {accessToken, refreshToken} = response.data.data
 
@@ -72,21 +73,18 @@ export class AuthServices {
 
     }
 
-    async logout(){
-       try {
-
-        const headers = this.getAuthHeaders()
-                
-         const response = await this.axiosInstance.post(`/logout`,{headers})
- 
-         localStorage.removeItem("accessToken",accessToken)
-         localStorage.removeItem("refreshToken",refreshToken)
- 
-         return response.data.data
-       } catch (error) {
-         throw error.response?.data?.message || "Somethig Went Wrong"
-       }
-    }
+    async logout() {
+  try {
+    const headers = this.getAuthHeaders()
+    const response = await this.axiosInstance.post('/logout', {}, { headers })
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    return response.data.data
+  } catch (error) {
+    console.error("Logout API Error:", error)
+    throw error.response?.data?.message || "Something Went Wrong"
+  }
+}
 
     async adminRefreshAccessToken(){
         try {

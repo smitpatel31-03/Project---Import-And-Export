@@ -7,7 +7,7 @@ const app = express()
 
 app.use(cors({
     origin: function (origin, callback) {
-        const allowedOrigins = [process.env.CORS_ORIGIN_USER, process.env.CORS_ORIGIN_ADMIN];
+        const allowedOrigins = [process.env.CORS_ORIGIN_USER1, process.env.CORS_ORIGIN_ADMIN1];
 
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, origin);  // ✅ Allow only the requested origin

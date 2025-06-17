@@ -22,7 +22,7 @@ function ChangeAdminDetails() {
         const data = await authServices.getUserDetails();
         if (data) {
           setUserData(data);
-          reset(data); // Pre-fill form fields with user data
+          reset(data); 
         } else {
         }
       } catch (err) {

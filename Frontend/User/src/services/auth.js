@@ -140,11 +140,11 @@ export class AuthServices {
         
     }
 
-    async findUserAddress(userId){
+    async findUserAddresses(userId){
        try {
 
          const headers = this.getAuthHeaders()
-         const response = await this.axiosInstance.get(`/findUserAddress/${userId}`,{headers})
+         const response = await this.axiosInstance.get(`/findUserAddresses/${userId}`,{headers})
  
  
          return response.data.data[0].address
@@ -153,6 +153,15 @@ export class AuthServices {
          throw error.response?.data?.message || "Somethig Went Wrong While Update Address"
        }
         
+    }
+
+    async findUserAddress(){
+        try {
+          const header = this.getAuthHeaders()
+          const response 
+        } catch (error) {
+          throw error.response?.data?.message || "Somethig Went Wrong While Get Address Details"
+        }
     }
 
     getAuthHeaders() {

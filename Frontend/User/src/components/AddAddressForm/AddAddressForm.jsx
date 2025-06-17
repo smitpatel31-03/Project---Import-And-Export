@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import authServices from "../../services/auth";
 import { Input, Button } from "../index.js";
 
-function AddAddressForm({ address }) {  // Accept address as a prop
+function AddAddressForm() {  
+  const {id} = useParams()
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const { register, handleSubmit, reset } = useForm();  // Using reset function
+  console.log("id:",id);
+  let address = null
 
   // 🔹 Update the form when `address` data is available
   useEffect(() => {
@@ -22,18 +25,18 @@ function AddAddressForm({ address }) {  // Accept address as a prop
         country: address?.country || "",
         mobileNumber: address?.mobileNumber || "",
       });
+      console.log("rest :",reset);
+      
     }
-  }, [address, reset]);  // 🔹 Dependency array ensures reset is called only when `address` changes
+  }, [ address,reset]); 
 
   const submit = async (formData) => {
     try {
-      let data;
-      if (address) {
-        data = await authServices.updateUserAddress(address._id, formData);
+      if (id) {
+        data = await authServices.updateUserAddress(id, formData);
       } else {
         data = await authServices.addUserAddress(formData);
       }
-
       if (data) navigate("/user");
     } catch (err) {
       setError("Failed to save address. Please try again.");

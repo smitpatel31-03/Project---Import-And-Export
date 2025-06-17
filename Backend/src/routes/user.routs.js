@@ -1,7 +1,7 @@
 import { Router }  from "express"
 import { registerUser,loginUser,logoutUser,getCurruntUser,UsersRefreshAccessToken,addUserAddress,bookOrder,updateUserAddress,changeUsersCurruntPassword,
     //Get Request
-    getUserDetails,getUserOrders,catagoryDetailsOrListOfCatagorysProduct,getAllCatagories,getProductsDetails,getCurruntOrder,changeUserDetails,getAllProducts,findUserAddress,getCurruntOrderDetails,getUserOrderDetails
+    getUserDetails,findUserAddress,getUserOrders,catagoryDetailsOrListOfCatagorysProduct,getAllCatagories,getProductsDetails,getCurruntOrder,changeUserDetails,getAllProducts,findUserAddresses,getCurruntOrderDetails,getUserOrderDetails
  } from "../controllers/user.controller.js"
 import { verifyJWTUser } from "../middlewares/auth.user.middleware.js"
 
@@ -26,7 +26,8 @@ router.route("/catagoryDetailsOrListOfCatagorysProduct/:catagoryId").get(catagor
 router.route("/getAllCatagories").get(getAllCatagories)
 router.route("/getProductsDetails/:productId").get(getProductsDetails)
 router.route("/getAllProducts").get(getAllProducts)
-router.route("/findUserAddress/:userId").get(verifyJWTUser,findUserAddress)
+router.route("/findUserAddresses/:userId").get(verifyJWTUser,findUserAddresses)
+router.route("/findUserAddress/:addressId").get(verifyJWTUser,findUserAddress)
 router.route("/getCurruntOrderDetails/:orderId").get(verifyJWTUser,getCurruntOrderDetails)
 router.route("/getUserOrderDetails/:orderId").get(verifyJWTUser,getUserOrderDetails)
 

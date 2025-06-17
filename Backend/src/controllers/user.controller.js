@@ -1102,7 +1102,7 @@ const getAllProducts = asyncHandler(async (_, res) => {
         )
 })
 
-const findUserAddress = asyncHandler(async (req, res) => {
+const findUserAddresses = asyncHandler(async (req, res) => {
     const { userId } = req.params
     
     const AddressDetails = await User.aggregate([
@@ -1147,6 +1147,36 @@ const findUserAddress = asyncHandler(async (req, res) => {
     ))
 })
 
+const findUserAddress = asyncHandler(async (req,res)=>{
+    const {addressId} = req.params
+
+    const userAddress = await UserAddress.aggregate([
+        {
+            $match : {
+                _id: new mongoose.Types.ObjectId(addressId)
+            }
+        },
+        { $project: 
+            { 
+                addressLine1: 1, 
+                addressLine2: 1, 
+                city: 1, 
+                postalCode: 1, 
+                state: 1, 
+                country: 1, 
+                mobileNumber: 1
+            } 
+        }
+
+    ])
+
+    res.status(200).json(new ApiResponse(
+        201,
+        userAddress[0],
+        "Your Address"
+    ))
+})
+
 const paypalPayment = asyncHandler(async (req,res) => {
     let paypal;
 
@@ -1186,6 +1216,7 @@ export {
     getProductsDetails,
     getCurruntOrder,
     getAllProducts,
+    findUserAddresses,
     findUserAddress,
     getUserOrderDetails,
     getCurruntOrderDetails,

@@ -9,12 +9,9 @@ function UserAddress() {
 
     useEffect(()=>{
         const fetchAddressDetails = async() =>{
-            const data = await authServices.findUserAddress(id)
-
+            const data = await authServices.findUserAddresses(id)
             if(data){
                 setAddress(data)
-                
-                
             }
         }
 

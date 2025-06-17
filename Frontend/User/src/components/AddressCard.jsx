@@ -1,6 +1,7 @@
 import React from "react";
 
 const AddressCard = ({ address }) => {
+  
   return (
     <div className="bg-white p-5 shadow-md rounded-xl border border-gray-300 hover:shadow-lg transition duration-300">
       <h2 className="text-lg font-bold text-gray-900 flex items-center">

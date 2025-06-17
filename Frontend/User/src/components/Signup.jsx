@@ -15,15 +15,12 @@ function Signup() {
     const create = async (data) => {
         setError("")
         try {
-
             const session = await authServices.registerUser({ ...data })
-
+            console.log("session:",session);
             if (session) {
-
                 const adminData = await authServices.getCurruntAdmin();
                 if (adminData) {
-                    dispatch(authlogin(adminData));
-                    navigate('/');
+                    navigate('/login');
                 }
             }
         } catch (error) {
