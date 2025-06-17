@@ -157,8 +157,10 @@ export class AuthServices {
 
     async findUserAddress(){
         try {
-          const header = this.getAuthHeaders()
-          const response 
+          const headers = this.getAuthHeaders()
+            const response = await this.axiosInstance.get(`/getUserDetails`,{headers})
+            
+            return response.data.data[0] 
         } catch (error) {
           throw error.response?.data?.message || "Somethig Went Wrong While Get Address Details"
         }
