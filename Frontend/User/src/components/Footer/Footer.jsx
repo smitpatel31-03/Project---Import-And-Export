@@ -1,6 +1,7 @@
 import React from "react";
 
 const Footer = () => {
+  let year = new Date()
   return (
     <footer className="bg-[#0A0E23] text-white py-10">
       <div className="max-w-6xl mx-auto px-6">
@@ -48,7 +49,7 @@ const Footer = () => {
 
         {/* Footer Bottom */}
         <div className="flex flex-col md:flex-row justify-between items-center mt-6 text-gray-400 text-sm">
-          <p>© 2024 All Rights Reserved.</p>
+          <p>© {year.getFullYear()} All Rights Reserved.</p>
           <div className="flex space-x-4">
             <p className="hover:text-blue-400 cursor-pointer">Term of Service</p>
             <p className="hover:text-blue-400 cursor-pointer">Policy Service</p>
